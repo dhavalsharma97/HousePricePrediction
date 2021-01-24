@@ -1,0 +1,34 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block content %}
+    <h1 class="heading">Okay! Here's what to expect:</h1>
+    <section class="flex_container">
+        <div class="column_content">
+            <figure>
+                <img src="{% static 'images/Questionnaire.png' %}" alt="Questionnaire Image"/>
+            </figure>
+            <h3>Step 1:</h3>
+            <h2>Tell us about your offer</h2>
+            <p>Answer a few quick questions online.</p>
+        </div>
+
+        <div class="column_content">
+            <figure>
+                <img src="{% static 'images/Guidance.png' %}" alt="Guidance Image"/>
+            </figure>
+            <h3>Step 2:</h3>
+            <h2>Get expert AI guidance</h2>
+            <p>If you choose to work with us, our AI can help you write a strong offer.</p>
+        </div>
+
+        <div class="column_content">
+            <figure>
+                <img src="{% static 'images/Offer.png' %}" alt="Offer Image"/>
+            </figure>
+            <h3>Step 3:</h3>
+            <h2>Finalize your offer</h2>
+            <p>Our AI will prepare your offer and generate a PDF Purchase Agreement on your behalf.</p>
+        </div>
+    </section>
+{% endblock %}
