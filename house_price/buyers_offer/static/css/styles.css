@@ -1,23 +1,14 @@
-.sidebar-nav {
-    margin-top: 20px;
-    padding: 0;
-    list-style: none;
-}
-
-.heading {
+/* Generic Styles */
+.center, h1 {
     text-align: center;
 }
 
+
+/* Buyers Offer Page */
 .flex_container {
     display: flex;
 	flex-wrap: nowrap;
-	margin: 0px 20px;
-}
-
-@media all and (max-width: 650px) {
-	.flex_container {
-		flex-direction: column;
-	}
+	margin: 0px;
 }
 
 .column_content {
@@ -27,8 +18,55 @@
 }
 
 @media all and (max-width: 650px) {
-	.column_content {
+	.flex_container {
+		flex-direction: column;
+    }
+    
+    .column_content {
         float: none;
         width: 100%;
 	}
+}
+
+input[type=button], input[type=submit], button {
+    background-color: lightskyblue;
+    color: black;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type=button]:hover, input[type=submit]:hover, button:hover {
+	background-color: lightblue;
+}
+
+
+/* Buyers Offer Form */
+.buyers_offer_form {
+    font-family: Arial, Helvetica, sans-serif;
+	font-size: 14pt;
+	color: black;
+}
+
+.page, #id_down_payment, #id_down_payment_label {
+    display: none;
+}
+
+ul {
+    list-style-type: none;
+}
+
+input[type=text], input[type=email], input[type=number] {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14pt;
+	color: black;
+	width: 35%;
+	padding: 12px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+	margin-top: 6px;
+	margin-bottom: 16px;
+	resize: vertical;
 }

@@ -1,0 +1,89 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block content %}
+    <form action="" method="POST" id="form" class="buyers_offer_form">
+        {% csrf_token %}
+            <div class="page">
+                <h2>Enter the offer price that you have in mind?</h2>
+                <p>Nothing you enter here is final. You and our AI will determine what’s best for you.</p>
+                {{ form.offer_price }}
+                <br><br>
+            </div>
+
+            <div class="page">
+                <h2>How do you plan to pay for this home?</h2>
+                <p>Nothing you enter here is final. You and our AI will determine what’s best for you.</p>
+                {{ form.payment_type }}
+                <label id="id_down_payment_label">Down Payment: </label>{{ form.down_payment }}
+                <br><br>
+            </div>
+
+            <div class="page">
+                <h2>Tell us a little about yourself</h2>
+                {{ form.first_name.label }}: {{ form.first_name }}<br><br>
+                {{ form.last_name.label }}: {{ form.last_name }}<br><br>
+                {{ form.email.label }}: {{ form.email }}<br><br>
+                {{ form.phone.label }}: {{ form.phone }}<br><br>
+
+                <h3>Property Details</h3>
+                {{ form.apartment.label }}: {{ form.apartment }}<br><br>
+                {{ form.street.label }}: {{ form.street }}<br><br>
+                {{ form.city.label }}: {{ form.city }}<br><br>
+                {{ form.state.label }}: {{ form.state }}<br><br>
+                {{ form.country.label }}: {{ form.country }}<br><br>
+                {{ form.pincode.label }}: {{ form.pincode }}
+                <br><br>
+            </div>
+
+        <button type="button" id="previous_button" onclick="nextPrev(-1)">Previous</button>
+        <button type="button" id="next_button" onclick="nextPrev(1)">Next</button>
+    </form>
+
+    <script>
+        var currentPage = 0;
+        showPage(currentPage);
+        document.getElementById("id_payment_type_0").addEventListener("click", hide_down_payment);
+        document.getElementById("id_payment_type_1").addEventListener("click", show_down_payment);
+
+        function hide_down_payment() {
+            document.getElementById("id_down_payment_label").style.display = "none"
+            document.getElementById("id_down_payment").style.display = "none";
+            document.getElementById("id_down_payment").value = -1;
+        }
+
+        function show_down_payment() {
+            document.getElementById("id_down_payment_label").style.display = "inline";
+            document.getElementById("id_down_payment").style.display = "inline";
+            document.getElementById("id_down_payment").value = null;
+        }
+
+        function showPage(number) {
+            var pages = document.getElementsByClassName("page");
+            pages[number].style.display = "block";
+
+            if (number == 0) {
+                document.getElementById("previous_button").style.display = "none";
+            } else {
+                document.getElementById("previous_button").style.display = "inline";
+            }
+            if (number == (pages.length - 1)) {
+                document.getElementById("next_button").innerHTML = "Submit";
+            } else {
+                document.getElementById("next_button").innerHTML = "Next";
+            }
+        }
+
+        function nextPrev(number) {
+            var pages = document.getElementsByClassName("page");
+
+            pages[currentPage].style.display = "none";
+            currentPage = currentPage + number;
+            if (currentPage >= pages.length) {
+                document.getElementById("form").submit();
+                return false;
+            }
+            showPage(currentPage);
+        }
+    </script>
+{% endblock %}

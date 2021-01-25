@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-    <h1 class="heading">Okay! Here's what to expect:</h1>
+    <h1>Here's what to expect:</h1>
     <section class="flex_container">
         <div class="column_content">
             <figure>
@@ -31,4 +31,7 @@
             <p>Our AI will prepare your offer and generate a PDF Purchase Agreement on your behalf.</p>
         </div>
     </section>
+    <a href="{% url 'form' %}">
+        <input type="button" value="Next"></button>
+    </a>
 {% endblock %}
