@@ -46,7 +46,7 @@ def offer_form(request):
             record.save()
 
             # redirect to a new URL:
-            return HttpResponseRedirect(reverse('all-borrowed'))
+            return HttpResponseRedirect(reverse('offerformconfirm'))
 
     # If this is a GET (or any other method) create the default form.
     else:
@@ -57,3 +57,10 @@ def offer_form(request):
     }
 
     return render(request, 'offer_form.html', context)
+
+
+def offer_form_confirm(request):
+    """View function for buyers offer confirmation page of site"""
+
+    # Render the HTML template offer_form_confirm.html
+    return render(request, 'offer_form_confirm.html')
