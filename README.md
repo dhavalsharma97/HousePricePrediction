@@ -6,10 +6,13 @@
  * Open a terminal in the root folder
  * Type "py manage.py runserver"
  * Go to http://127.0.0.1:8000/ on your browser
- * Admin Page - http://127.0.0.1:8000/admin [Username - admin, password - admin]
+ * Admin Page - http://127.0.0.1:8000/admin [Username - admin, Password - admin]
 
 ## Project Details
  The home page is redirected to the BuyersOffer page. This project also features an admin page for managing the database.
+
+ ### Applications
+ * Buyers Offer
 
 ## Important Instructions
  * Please create a branch before working. 
