@@ -17,7 +17,7 @@
  * Try to avoid pushing the database in any update because we are using SQLite which is a file based database.
 
 ## Credits
- Xiaobai Liu
- Dhaval Sharma
- Ronak Thakkar
- Mounika Reddy
+ * Xiaobai Liu
+ * Dhaval Sharma
+ * Ronak Thakkar
+ * Mounika Reddy
