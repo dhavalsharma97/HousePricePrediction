@@ -18,6 +18,5 @@ class BuyersOfferForm(forms.Form):
     apartment = forms.CharField(max_length=50, label="Apartment")
     street = forms.CharField(max_length=50, label="Street")
     city = forms.CharField(max_length=50, label="City")
-    state = forms.CharField(max_length=50, label="State")
-    country = forms.CharField(max_length=50, label="Country")
-    pincode = forms.IntegerField(label="Pincode")
+    county = forms.CharField(max_length=50, label="County")
+    zipcode = forms.IntegerField(label="Zipcode")

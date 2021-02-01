@@ -23,9 +23,8 @@ class PropertyAddress(models.Model):
     apartment = models.CharField(max_length=50, help_text="Enter the property apartment")
     street = models.CharField(max_length=50, help_text="Enter the property street")
     city = models.CharField(max_length=50, help_text="Enter a type of property city")
-    state = models.CharField(max_length=50, help_text="Enter a type of property state")
-    country = models.CharField(max_length=50, help_text="Enter a type of property country")
-    pincode = models.IntegerField(help_text="Enter a type of property pincode")
+    county = models.CharField(max_length=50, help_text="Enter a type of property county")
+    zipcode = models.IntegerField(help_text="Enter a type of property zipcode")
 
     def __str__(self):
         """String for representing the model object"""

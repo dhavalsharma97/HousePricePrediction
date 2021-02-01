@@ -8,9 +8,9 @@ class PaymentAdmin(admin.ModelAdmin):
 
 @admin.register(PropertyAddress)
 class PropertyAddressAdmin(admin.ModelAdmin):
-    list_display = ('apartment', 'street', 'city', 'state', 'country')
-    list_filter = ['city', 'state']
-    fields = [('apartment', 'street'), ('city', 'state'), 'country']
+    list_display = ('apartment', 'street', 'city', 'county')
+    list_filter = ['city', 'county']
+    fields = [('apartment', 'street'), ('city', 'county')]
 
 @admin.register(Buyer)
 class BuyerAdmin(admin.ModelAdmin):

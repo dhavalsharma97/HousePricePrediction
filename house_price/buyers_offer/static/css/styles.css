@@ -29,6 +29,7 @@
 }
 
 input[type=button], input[type=submit], button {
+	font-weight: bold;
     background-color: lightskyblue;
     color: black;
     padding: 12px 20px;
@@ -38,6 +39,7 @@ input[type=button], input[type=submit], button {
 }
 
 input[type=button]:hover, input[type=submit]:hover, button:hover {
+	font-weight: bold;
 	background-color: lightblue;
 }
 
@@ -60,6 +62,7 @@ ul {
 input[type=text], input[type=email], input[type=number] {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14pt;
+	font-weight: bold;
 	color: black;
 	width: 35%;
 	padding: 12px;

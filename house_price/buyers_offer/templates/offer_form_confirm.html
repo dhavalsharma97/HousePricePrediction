@@ -1,6 +1,14 @@
 {% extends "base_generic.html" %}
+{% load static %}
 
 {% block content %}
     <h2>Thank you for submitting the information</h2>
     <p>We will contact the seller shortly with your offer details</p>
+
+    <p>
+        Click here to download your purchase agreement<br>
+        <a href="{% static 'pdf/purchase_agreement_filled.pdf' %}" download>
+            <button>Download</button>
+        </a>
+    </p>
 {% endblock %}
