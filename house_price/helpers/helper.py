@@ -27,20 +27,12 @@ def tick_buttons(page, fields):
         for field in fields:
             if writer_annot.get('/T') == field:
                 writer_annot.update({
-                    NameObject("/V"): NameObject(fields[field]),
-                    NameObject("/AS"): NameObject(fields[field])
+                    NameObject('/V'): NameObject(fields[field]),
+                    NameObject('/AS'): NameObject(fields[field])
                 })
 
 def fill_pdf(application_name, pdf_name, form_data):
-    reader = PdfFileReader(application_name + '/static/pdf/' + pdf_name + '.pdf')
-    first_page = reader.getPage(0)
-
-    print(reader.getFields())
-
-    writer = PdfFileWriter()
-    set_need_appearances_writer(writer)
-
-    data = {
+    data_1 = {
         'Date Prepared': date.today(),
         'A THIS IS AN OFFER FROM': form_data['first_name'] + ' ' + form_data['last_name'],
         'property to be acquired': form_data['apartment'] + ' ' + form_data['street'],
@@ -48,30 +40,34 @@ def fill_pdf(application_name, pdf_name, form_data):
         'county': form_data['county'],
         'zip code': form_data['zipcode'],
         'purchase price': num2words(form_data['offer_price']),
-        'dollars': form_data['offer_price']
+        'dollars': form_data['offer_price'],
+        'parcel number': form_data['parcel_number'],
+        'E Buyer and Seller are referred to herein as the Parties Brokers are not Parties to this Agreement': form_data['escrow_days']
     }
 
     # Check Box - /Yes
     # Button - /On
-    if (form_data['down_payment'] != -1):
-        data['BALANCE OF DOWN PAYMENT OR PURCHASE PRICE in the amount of'] = form_data['down_payment']
-    else:    
-        tick_buttons(first_page, {'Check Box6': '/Yes'})
+    data_2 = {
+        'D CLOSE OF ESCROW shall occur on': '/On',
+        'dateor': '/On'
+    }
 
-    writer.updatePageFormFieldValues(first_page, data)
-    writer.addPage(first_page)
+    reader = PdfFileReader(application_name + '/static/pdf/' + pdf_name + '.pdf')
+    writer = PdfFileWriter()
+    set_need_appearances_writer(writer)
+    
+    for page_number in range(reader.getNumPages()):
+        page = reader.getPage(page_number)
 
-    with open(application_name + '/static/pdf/' + pdf_name + '_filled.pdf',"wb") as new:
-        writer.write(new)
+        if (form_data['down_payment'] != -1):
+            data_1['BALANCE OF DOWN PAYMENT OR PURCHASE PRICE in the amount of'] = form_data['down_payment']
+        else:    
+            tick_buttons(page, {'Check Box6': '/Yes'})
 
-"""fill_pdf('buyers_offer', 'purchase_agreement', {
-    'first_name': 'Dhaval',
-    'last_name': 'Sharma',
-    'offer_price': 250000,
-    'apartment': '6621',
-    'street': 'Montezuma Rd',
-    'city': 'San Diego',
-    'county': 'San Diego',
-    'zipcode': 92115,
-    'down_payment': 50000
-})"""
+        writer.updatePageFormFieldValues(page, data_1)
+        tick_buttons(page, data_2)
+
+        writer.addPage(page)
+
+    with open(application_name + '/static/pdf/' + pdf_name + '_filled.pdf',"wb") as pdf:
+        writer.write(pdf)

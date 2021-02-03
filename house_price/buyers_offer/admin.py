@@ -8,7 +8,7 @@ class PaymentAdmin(admin.ModelAdmin):
 
 @admin.register(PropertyAddress)
 class PropertyAddressAdmin(admin.ModelAdmin):
-    list_display = ('apartment', 'street', 'city', 'county')
+    list_display = ('apartment', 'street', 'city', 'county', 'parcel_number')
     list_filter = ['city', 'county']
     fields = [('apartment', 'street'), ('city', 'county')]
 
@@ -21,5 +21,8 @@ class BuyerAdmin(admin.ModelAdmin):
         }),
         ('Property Details', {
             'fields': ('offer_price', 'property_address', 'payment')
+        }),
+        ('Escrow Dose Date', {
+            'fields': ('escrow_date', 'escrow_days')
         })
     )

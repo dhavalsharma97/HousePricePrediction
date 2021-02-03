@@ -35,6 +35,9 @@ def offer_form(request):
                 'city': form.cleaned_data['city'],
                 'county': form.cleaned_data['county'],
                 'zipcode': form.cleaned_data['zipcode'],
+                'parcel_number': form.cleaned_data['parcel_number'],
+                'escrow_date': form.cleaned_data['escrow_date'],
+                'escrow_days': form.cleaned_data['escrow_days'],
                 'payment_type': form.cleaned_data['payment_type'],
                 'down_payment': form.cleaned_data['down_payment']
             }
@@ -47,13 +50,16 @@ def offer_form(request):
                                     street=form_data['street'],
                                     city=form_data['city'],
                                     county=form_data['county'],
-                                    zipcode=form_data['zipcode'])
+                                    zipcode=form_data['zipcode'],
+                                    parcel_number=form_data['parcel_number'])
             record2.save()
 
             record = Buyer(first_name=form_data['first_name'],
                             last_name=form_data['last_name'],
                             email=form_data['email'],
                             phone=form_data['phone'],
+                            escrow_date=form_data['escrow_date'],
+                            escrow_days=form_data['escrow_days'],
                             offer_price=form_data['offer_price'])
             record.save()
             

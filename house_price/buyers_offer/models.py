@@ -22,9 +22,10 @@ class PropertyAddress(models.Model):
     """Model representing a payment type"""
     apartment = models.CharField(max_length=50, help_text="Enter the property apartment")
     street = models.CharField(max_length=50, help_text="Enter the property street")
-    city = models.CharField(max_length=50, help_text="Enter a type of property city")
-    county = models.CharField(max_length=50, help_text="Enter a type of property county")
-    zipcode = models.IntegerField(help_text="Enter a type of property zipcode")
+    city = models.CharField(max_length=50, help_text="Enter the property city")
+    county = models.CharField(max_length=50, help_text="Enter the property county")
+    zipcode = models.IntegerField(help_text="Enter the property zipcode")
+    parcel_number = models.CharField(max_length=50, help_text="Enter the parcel number")
 
     def __str__(self):
         """String for representing the model object"""
@@ -41,6 +42,8 @@ class Buyer(models.Model):
     offer_price = models.IntegerField(help_text="Enter the offer price")
     property_address = models.ManyToManyField(PropertyAddress, help_text="Enter the address of property")
     payment = models.ManyToManyField(Payment, help_text="Enter the payment")
+    escrow_date = models.DateField(help_text="Enter the Escrow Dose Date")
+    escrow_days = models.IntegerField(help_text="Enter the Escrow Dose Days")
 
     class Meta:
         ordering = ['first_name', 'last_name']

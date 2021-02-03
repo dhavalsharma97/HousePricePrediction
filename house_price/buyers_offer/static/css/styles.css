@@ -1,14 +1,32 @@
 /* Generic Styles */
-.center, h1 {
-    text-align: center;
+.header, .content, .footer {
+	text-align: center;
 }
 
+body {
+	background-color: #EFEFEF;
+	margin: 0px;
+}
+
+header {
+	padding: 0px;
+	margin: 0px;
+	background-color: #1A5653;
+	color: #EFEFEF;
+}
+
+footer {
+	clear: both;
+	height: auto;
+	background-color: #1A5653;
+	color: #EFEFEF;
+	padding-bottom: 1%;
+}
 
 /* Buyers Offer Page */
 .flex_container {
     display: flex;
 	flex-wrap: nowrap;
-	margin: 0px;
 }
 
 .column_content {
@@ -30,8 +48,8 @@
 
 input[type=button], input[type=submit], button {
 	font-weight: bold;
-    background-color: lightskyblue;
-    color: black;
+    background-color: #4CAF50;
+    color: white;
     padding: 12px 20px;
     border: none;
     border-radius: 4px;
@@ -40,13 +58,12 @@ input[type=button], input[type=submit], button {
 
 input[type=button]:hover, input[type=submit]:hover, button:hover {
 	font-weight: bold;
-	background-color: lightblue;
+	background-color: #45a049;
 }
 
 
 /* Buyers Offer Form */
 .buyers_offer_form {
-    font-family: Arial, Helvetica, sans-serif;
 	font-size: 14pt;
 	color: black;
 }
@@ -60,9 +77,6 @@ ul {
 }
 
 input[type=text], input[type=email], input[type=number] {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 14pt;
-	font-weight: bold;
 	color: black;
 	width: 35%;
 	padding: 12px;

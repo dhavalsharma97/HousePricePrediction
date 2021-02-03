@@ -10,6 +10,17 @@
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-      <div class="center">{% block content %}{% endblock %}</div>
+  <header class="header">
+      <h1>
+          AI Powered House Trade System
+      </h1>
+  </header>
+
+  <div class="content">{% block content %}{% endblock %}</div>
+
+  <footer class="footer">
+    <hr>
+    <h4>San Diego State University</h4>
+  </footer>
 </body>
 </html>
