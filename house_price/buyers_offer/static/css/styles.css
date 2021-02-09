@@ -68,8 +68,12 @@ input[type=button]:hover, input[type=submit]:hover, button:hover {
 	color: black;
 }
 
-.page, #id_down_payment, #id_down_payment_label {
+.page, #id_down_payment, #id_down_payment_label, #id_escrow_date, #id_escrow_days, #buyer_agent, #seller_agent {
     display: none;
+}
+
+#escrow_date, #escrow_days {
+	background-color: gray;
 }
 
 ul {
@@ -86,4 +90,8 @@ input[type=text], input[type=email], input[type=number] {
 	margin-top: 6px;
 	margin-bottom: 16px;
 	resize: vertical;
+}
+
+input[type=checkbox], input[type=radiobutton] {
+    zoom: 1.5;
 }

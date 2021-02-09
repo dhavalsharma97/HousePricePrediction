@@ -1,0 +1,69 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block content %}
+<form action="" method="POST" id="form" class="buyers_offer_form">
+    {% csrf_token %}
+    <h2>Agency Details</h2>
+    <div class="page">
+        <h3>Acknowledgement</h3>
+        <p>The Parties each acknowledge receipt of a “Disclosure Regarding Real Estate Agency Relationships” (C.A.R. Form AD)</p>
+        {{ form.ad }}
+    </div>
+
+    <div class="page">
+        <h3>Confirmation</h3>
+        Do you have an agent? {{ form.buyer_agent }}<br>
+
+        <div id="buyer_agent">
+            {{ form.buyer_brokerage_firm.label }}: {{ form.buyer_brokerage_firm }}<br>
+            {{ form.buyer_brokerage_firm.label }}: {{ form.buyer_brokerage_firm }}<br>
+            {{ form.buyer_brokerage_license_number.label }}: {{ form.buyer_brokerage_license_number }}<br>
+            {{ form.buyer_agent_name.label }}: {{ form.buyer_agent_name }}<br>
+            {{ form.buyer_agent_license_number.label }}: {{ form.buyer_agent_license_number }}<br>
+            Is the brokerage dual? {{ form.dual_brokerage }}<br>
+        </div>
+
+        <div id="seller_agent">
+            {{ form.seller_brokerage_firm.label }}: {{ form.seller_brokerage_firm }}<br>
+            {{ form.seller_brokerage_license_number.label }}: {{ form.seller_brokerage_license_number }}<br>
+            {{ form.seller_agent_name.label }}: {{ form.seller_agent_name }}<br>
+            {{ form.seller_agent_license_number.label }}: {{ form.seller_agent_license_number }}<br>
+        </div>
+    </div>
+
+    <div class="page">
+        <h3>Acknowledgement</h3>
+        <p>The Parties each acknowledge receipt of a “Possible Representation of More than One Buyer or Seller - Disclosure and Consent” (C.A.R. Form PRBS)</p>
+        {{ form.prbs }}
+    </div>
+
+    <button type="button" id="previous_button" onclick="nextPrev(-1)">Previous</button>
+    <button type="button" id="next_button" onclick="nextPrev(1)">Next</button>
+</form>
+
+<script src="{% static 'scripts/scripts.js' %}"></script>
+<script>
+    // Agency
+    document.getElementById("id_buyer_agent").addEventListener("click", agent_checkbox)
+    document.getElementById("id_dual_brokerage").addEventListener("click", dual_brokerage_checkbox)
+
+    function agent_checkbox() {
+        if (document.getElementById("id_buyer_agent").checked) {
+            document.getElementById("buyer_agent").style.display = "inline";
+            document.getElementById("seller_agent").style.display = "inline";
+        } else {
+            document.getElementById("buyer_agent").style.display = "none";
+            document.getElementById("seller_agent").style.display = "none";
+        }
+    }
+
+    function dual_brokerage_checkbox() {
+        if (document.getElementById("id_buyer_agent").checked && !document.getElementById("id_dual_brokerage").checked) {
+            document.getElementById("seller_agent").style.display = "inline";
+        } else {
+            document.getElementById("seller_agent").style.display = "none";
+        }
+    }
+</script>
+{% endblock %}
