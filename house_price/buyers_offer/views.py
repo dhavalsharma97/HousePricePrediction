@@ -4,7 +4,7 @@ from django.urls import reverse
 
 from helpers.helper import fill_pdf
 from buyers_offer.forms import BuyersOfferForm, BuyersOfferForm1
-from buyers_offer.models import Buyer, Seller, Payment, Property, BuyerAgent, SellerAgent
+from buyers_offer.models import BuyersOffer
 
 def index(request):
     """View function for home page of site"""
@@ -23,36 +23,29 @@ def offer_form(request):
         # Check if the form is valid:
         if form.is_valid():
             # Save the record to database
-            payment_obj = Payment(payment_type=form.cleaned_data['payment_type'], 
-                            down_payment=form.cleaned_data['down_payment'])
-            payment_obj.save()
-
-            buyer_obj = Buyer(first_name=form.cleaned_data['first_name'],
-                            last_name=form.cleaned_data['last_name'],
-                            email=form.cleaned_data['email'],
-                            phone=form.cleaned_data['phone'],
-                            escrow_date=form.cleaned_data['escrow_date'],
-                            escrow_days=form.cleaned_data['escrow_days'],
-                            offer_price=form.cleaned_data['offer_price'])
-            buyer_obj.save()
-            buyer_obj.payment.add(payment_obj)
-            buyer_obj.save()
-
-            property_obj = Property(apartment=form.cleaned_data['apartment'],
-                                    street=form.cleaned_data['street'],
-                                    city=form.cleaned_data['city'],
-                                    county=form.cleaned_data['county'],
-                                    zipcode=form.cleaned_data['zipcode'],
-                                    parcel_number=form.cleaned_data['parcel_number'])
-            property_obj.save()
-            property_obj.buyer.add(buyer_obj)
-            property_obj.save()
+            buyers_offer_obj = BuyersOffer(first_name=form.cleaned_data['first_name'],
+                                        last_name=form.cleaned_data['last_name'],
+                                        email=form.cleaned_data['email'],
+                                        phone=form.cleaned_data['phone'],
+                                        offer_price=form.cleaned_data['offer_price'],
+                                        payment_type=form.cleaned_data['payment_type'], 
+                                        down_payment=form.cleaned_data['down_payment'],
+                                        apartment=form.cleaned_data['apartment'],
+                                        street=form.cleaned_data['street'],
+                                        city=form.cleaned_data['city'],
+                                        county=form.cleaned_data['county'],
+                                        zipcode=form.cleaned_data['zipcode'],
+                                        parcel_number=form.cleaned_data['parcel_number'],
+                                        escrow_date=form.cleaned_data['escrow_date'],
+                                        escrow_days=form.cleaned_data['escrow_days'])
+            
+            buyers_offer_obj.save()
 
             # Saving the buyer details
-            request.session['property'] = property_obj.pk
+            request.session['buyer'] = buyers_offer_obj.pk
 
             # Generate PDF
-            fill_pdf('buyers_offer', 'purchase_agreement', request.session['property'])
+            fill_pdf('buyers_offer', 'purchase_agreement', request.session['buyer'])
 
             # Redirect to a new URL:
             return HttpResponseRedirect(reverse('offerformconfirm'))
@@ -85,42 +78,30 @@ def offer_form_1(request):
         # Check if the form is valid:
         if form.is_valid():
             # Save the record to database
-            property_obj = Property.objects.get(pk=request.session['property'])
-            buyer_obj = property_obj.buyer.all()[0]
+            buyers_offer_obj = BuyersOffer.objects.get(pk=request.session['buyer'])
 
-            buyer_obj.ad = form.cleaned_data['ad']
-            buyer_obj.agent = form.cleaned_data['buyer_agent']
-            buyer_obj.dual_brokerage = form.cleaned_data['dual_brokerage']
-            buyer_obj.prbs = form.cleaned_data['prbs']
-            buyer_obj.save()
+            buyers_offer_obj.ad = form.cleaned_data['ad']
+            buyers_offer_obj.buyer_agent = form.cleaned_data['buyer_agent']
+            buyers_offer_obj.dual_brokerage = form.cleaned_data['dual_brokerage']
+            buyers_offer_obj.prbs = form.cleaned_data['prbs']
 
             if form.cleaned_data['buyer_agent']:
-                buyer_agent_obj = BuyerAgent(brokerage_firm=form.cleaned_data['buyer_brokerage_firm'],
-                                    brokerage_license_number=form.cleaned_data['buyer_brokerage_license_number'],
-                                    agent_name=form.cleaned_data['buyer_agent_name'],
-                                    agent_license_number=form.cleaned_data['buyer_agent_license_number'])
-                buyer_agent_obj.save()
-                buyer_obj.agent_firm.add(buyer_agent_obj)
-                buyer_obj.save()
+                buyers_offer_obj.buyer_brokerage_firm = form.cleaned_data['buyer_brokerage_firm']
+                buyers_offer_obj.buyer_brokerage_license_number = form.cleaned_data['buyer_brokerage_license_number']
+                buyers_offer_obj.buyer_agent_name = form.cleaned_data['buyer_agent_name']
+                buyers_offer_obj.buyer_agent_license_number = form.cleaned_data['buyer_agent_license_number']
 
                 if not form.cleaned_data['dual_brokerage']:
-                    seller_obj = Seller()
-                    seller_obj.save()
-                    seller_obj.agent = not form.cleaned_data['dual_brokerage']
+                    buyers_offer_obj.seller_agent = not form.cleaned_data['dual_brokerage']
+                    buyers_offer_obj.seller_brokerage_firm = form.cleaned_data['seller_brokerage_firm']
+                    buyers_offer_obj.seller_brokerage_license_number=form.cleaned_data['seller_brokerage_license_number']
+                    buyers_offer_obj.seller_agent_name=form.cleaned_data['seller_agent_name']
+                    buyers_offer_obj.seller_agent_license_number=form.cleaned_data['seller_agent_license_number']
 
-                    seller_agent_obj = SellerAgent(brokerage_firm=form.cleaned_data['seller_brokerage_firm'],
-                                        brokerage_license_number=form.cleaned_data['seller_brokerage_license_number'],
-                                        agent_name=form.cleaned_data['seller_agent_name'],
-                                        agent_license_number=form.cleaned_data['seller_agent_license_number'])
-                    seller_agent_obj.save()
-                    seller_obj.agent_firm.add(seller_agent_obj)
-                    seller_obj.save()
-
-                    property_obj.seller.add(seller_obj)
-                    property_obj.save()
+            buyers_offer_obj.save()
 
             # Generate PDF
-            fill_pdf('buyers_offer', 'purchase_agreement', request.session['property'])
+            fill_pdf('buyers_offer', 'purchase_agreement', request.session['buyer'])
 
             # Redirect to a new URL:
             return HttpResponseRedirect(reverse('offerformconfirm1'))

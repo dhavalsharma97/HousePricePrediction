@@ -3,7 +3,7 @@ from PyPDF2.generic import BooleanObject, NameObject, IndirectObject
 from datetime import date
 from num2words import num2words
 
-from buyers_offer.models import Buyer, Property, Payment
+from buyers_offer.models import BuyersOffer
 
 def set_need_appearances_writer(writer: PdfFileWriter):
     try:
@@ -33,21 +33,19 @@ def tick_buttons(page, fields):
                     NameObject('/AS'): NameObject(fields[field])
                 })
 
-def fill_pdf(application_name, pdf_name, property_id):
-    property_obj = Property.objects.get(pk=property_id)
-    buyer_obj = property_obj.buyer.all()[0]
-    payment_obj = buyer_obj.payment.all()[0]
+def fill_pdf(application_name, pdf_name, buyer_id):
+    buyers_offer_obj = BuyersOffer.objects.get(pk=buyer_id)
     
     data_1 = {
         'Date Prepared': date.today(),
-        'A THIS IS AN OFFER FROM': buyer_obj.first_name + ' ' + buyer_obj.last_name,
-        'property to be acquired': property_obj.apartment + ' ' + property_obj.street,
-        'city': property_obj.city,
-        'county': property_obj.county,
-        'zip code': property_obj.zipcode,
-        'purchase price': num2words(buyer_obj.offer_price),
-        'dollars': buyer_obj.offer_price,
-        'parcel number': property_obj.parcel_number
+        'A THIS IS AN OFFER FROM': buyers_offer_obj.first_name + ' ' + buyers_offer_obj.last_name,
+        'property to be acquired': buyers_offer_obj.apartment + ' ' + buyers_offer_obj.street,
+        'city': buyers_offer_obj.city,
+        'county': buyers_offer_obj.county,
+        'zip code': buyers_offer_obj.zipcode,
+        'purchase price': num2words(buyers_offer_obj.offer_price),
+        'dollars': buyers_offer_obj.offer_price,
+        'parcel number': buyers_offer_obj.parcel_number
     }
 
     # Check Box - /Yes
@@ -55,39 +53,35 @@ def fill_pdf(application_name, pdf_name, property_id):
     data_2 = {}
 
     # Is the payment Cash or Loan
-    if (payment_obj.down_payment != -1):
-        data_1['BALANCE OF DOWN PAYMENT OR PURCHASE PRICE in the amount of'] = payment_obj.down_payment
+    if (buyers_offer_obj.down_payment != -1):
+        data_1['BALANCE OF DOWN PAYMENT OR PURCHASE PRICE in the amount of'] = buyers_offer_obj.down_payment
     else:    
         data_2['Check Box6'] = '/Yes'
 
     # Escrow Date or Escrow Days
-    if(buyer_obj.escrow_date):
+    if(buyers_offer_obj.escrow_date):
         data_2['D CLOSE OF ESCROW shall occur on'] = '/On'
     else:
         data_2['dateor'] = '/On'
 
     # Acknowledgement for form AD
-    if(buyer_obj.ad):
+    if(buyers_offer_obj.ad):
         data_2['a'] = '/On'
 
     # If buyer has an agent
-    if buyer_obj.agent:
-        buyer_agent_obj = buyer_obj.agent_firm.all()[0]
-        
+    if buyers_offer_obj.buyer_agent:
         # If seller has an agent
-        if not buyer_obj.dual_brokerage:
-            seller_obj = property_obj.seller.all()[0]
-            seller_agent_obj = seller_obj.agent_firm.all()[0]
-            data_1['Selling Agent'] = buyer_agent_obj.brokerage_firm
-            data_1['Listing Agent'] = seller_agent_obj.brokerage_firm
+        if not buyers_offer_obj.dual_brokerage:
+            data_1['Selling Agent'] = buyers_offer_obj.buyer_brokerage_firm
+            data_1['Listing Agent'] = buyers_offer_obj.seller_brokerage_firm
             data_2['undefined_2'] = '/On'
             data_2['Listing Agent is the agent of check one'] = '/On'
         else:
-            data_1['Listing Agent'] = buyer_agent_obj.brokerage_firm
+            data_1['Listing Agent'] = buyers_offer_obj.buyer_brokerage_firm
             data_2['the Seller exclusively or'] = '/On'
 
     # Acknowledgement for form PRBS
-    if(buyer_obj.prbs):
+    if(buyers_offer_obj.prbs):
         data_2['Check Box1'] = '/Yes'
 
     reader = PdfFileReader(application_name + '/static/pdf/' + pdf_name + '.pdf')
