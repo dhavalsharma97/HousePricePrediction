@@ -52,20 +52,58 @@ def fill_pdf(application_name, pdf_name, buyer_id):
     # Button - /On
     data_2 = {}
 
-    # Is the payment Cash or Loan
-    if (buyers_offer_obj.down_payment != -1):
+    # Cash Payment
+    if buyers_offer_obj.payment_type == "Cash":
+        if buyers_offer_obj.fund_verification == "Attached with this agreement":
+            data_2['Check Box6'] = '/Yes'
+        else:
+            data_2['Check Box7'] = '/Yes'
+            data_1['all cash offer number of days'] = buyers_offer_obj.fund_verification_other
+    # Loan Payment
+    else:
+        data_1['first loan amount'] = buyers_offer_obj.first_loan_amount
+        
+        if buyers_offer_obj.first_loan_type == "FHA":
+            data_2['Check Box8'] = '/Yes'
+        elif buyers_offer_obj.first_loan_type == "VA":
+            data_2['Check Box9'] = '/Yes'
+        elif buyers_offer_obj.first_loan_type == "Seller Financing":
+            data_2['Check Box10'] = '/Yes'
+        elif buyers_offer_obj.first_loan_type == "AFA":
+            data_2['Check Box11'] = '/Yes'
+        elif buyers_offer_obj.first_loan_type == "Other":
+            data_2['Check Box12'] = '/Yes'
+            data_1['other type of first loan financing'] = buyers_offer_obj.first_loan_type_other
+        
+        data_1['first loan fixed rate'] = buyers_offer_obj.first_loan_fixed_rate
+        data_1['first loan adjustable rate'] = buyers_offer_obj.first_loan_adjustable_loan_rate
+        data_1['shall pay points not to exceed'] = buyers_offer_obj.first_loan_max_points
         data_1['BALANCE OF DOWN PAYMENT OR PURCHASE PRICE in the amount of'] = buyers_offer_obj.down_payment
-    else:    
-        data_2['Check Box6'] = '/Yes'
+
+        if buyers_offer_obj.second_loan:
+            data_2['Check Box14'] = '/Yes'
+            data_1['second load amount'] = buyers_offer_obj.second_loan_amount
+        
+        if buyers_offer_obj.second_loan_type == "Seller Financing":
+            data_2['Check Box16'] = '/Yes'
+        elif buyers_offer_obj.second_loan_type == "AFA":
+            data_2['Check Box17'] = '/Yes'
+        elif buyers_offer_obj.second_loan_type == "Other":
+            data_2['Check Box18'] = '/Yes'
+            data_1['other type of second loan financing'] = buyers_offer_obj.second_loan_type_other
+        
+        data_1['second loan fixed rate'] = buyers_offer_obj.second_loan_fixed_rate
+        data_1['second loan adjustable rate'] = buyers_offer_obj.second_loan_adjustable_loan_rate
+        data_1['shall pay points not to exceed %'] = buyers_offer_obj.second_loan_max_points
 
     # Escrow Date or Escrow Days
-    if(buyers_offer_obj.escrow_date):
+    if buyers_offer_obj.escrow_date:
         data_2['D CLOSE OF ESCROW shall occur on'] = '/On'
     else:
         data_2['dateor'] = '/On'
 
     # Acknowledgement for form AD
-    if(buyers_offer_obj.ad):
+    if buyers_offer_obj.ad:
         data_2['a'] = '/On'
 
     # If buyer has an agent
@@ -84,16 +122,49 @@ def fill_pdf(application_name, pdf_name, buyer_id):
     if(buyers_offer_obj.prbs):
         data_2['Check Box1'] = '/Yes'
 
+    # Deposit Details
+    data_1['initial deposit amount'] = buyers_offer_obj.initial_deposit
+
+    if buyers_offer_obj.deposit_payment_type == "Cashier's Check":
+        data_2['Check Box2'] = '/Yes'
+    elif buyers_offer_obj.deposit_payment_type == "Personal Check":
+        data_2['Check Box3'] = '/Yes'
+    elif buyers_offer_obj.deposit_payment_type == "Other":
+        data_2['Check Box4'] = '/Yes'
+        data_1['other deposit type'] = buyers_offer_obj.deposit_payment_type_other
+
+    # Finance Terms
+    if buyers_offer_obj.deposit_due == "Other":
+        data_1['agreed upon number of days after acceptance'] = buyers_offer_obj.deposit_due_other
+
+    data_1['additional financing terms 1'] = buyers_offer_obj.additional_terms
+
+    if buyers_offer_obj.down_payment_days != 3:
+        data_1['days written verification'] = buyers_offer_obj.down_payment_days
+
+    if buyers_offer_obj.appraisal_contingency:
+        data_1['days cancel agreement after acceptance'] = buyers_offer_obj.appraisal_contingency_days
+    else:    
+        data_2['Check Box21'] = '/Yes'
+
+    data_1['loan application number of days after acceptance'] = buyers_offer_obj.loan_prequalification_days
+
+    if buyers_offer_obj.loan_contingency:
+        data_1['loan contigency 21 days or'] = buyers_offer_obj.loan_contingency_days
+    
+    if buyers_offer_obj.agreement_contingency:
+        data_2['no loan contingency'] = '/Yes'
+
+    data_1['other terms page 2'] = buyers_offer_obj.other_terms
+
     reader = PdfFileReader(application_name + '/static/pdf/' + pdf_name + '.pdf')
     writer = PdfFileWriter()
     set_need_appearances_writer(writer)
     
     for page_number in range(reader.getNumPages()):
         page = reader.getPage(page_number)
-
         writer.updatePageFormFieldValues(page, data_1)
         tick_buttons(page, data_2)
-
         writer.addPage(page)
 
     with open(application_name + '/static/pdf/' + pdf_name + '_filled.pdf',"wb") as pdf:

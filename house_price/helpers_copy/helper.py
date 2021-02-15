@@ -71,7 +71,7 @@ def tick_buttons(page, fields):
 
 def fill_pdf(application_name, pdf_name, form_data):
     reader = PdfFileReader(pdf_name + '.pdf')
-    first_page = reader.getPage(0)
+    first_page = reader.getPage(1)
 
     print(reader.getFields())
 
@@ -104,6 +104,13 @@ def fill_pdf(application_name, pdf_name, form_data):
         'D CLOSE OF ESCROW shall occur on': '/On',
         'dateor': '/On'
     }
+
+    data_2['Check Box7'] = '/Yes'
+    data_1['all cash offer number of days'] = 'Test'
+    data_1['second load amount'] = 'Test'
+    data_1['loan application number of days after acceptance'] = '/Yes'
+    data_1['other terms page 2'] = 'Test'
+    
     data_2['Check Box1'] = '/Yes'
     data_2['undefined_2'] = '/On'
     data_2['the Seller exclusively or'] = '/On'

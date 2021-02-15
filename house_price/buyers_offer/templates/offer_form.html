@@ -13,9 +13,46 @@
 
         <div class="page">
             <h3>How do you plan to pay for this home?</h3>
-            <p>Nothing you enter here is final. You and our AI will determine what’s best for you.</p>
             {{ form.payment_type }}
-            <label id="id_down_payment_label">Down Payment: </label> {{ form.down_payment }}
+            
+            <div id="cash_offer">
+                Fund Verification:
+                {{ form.fund_verification }}
+                <label id="fund_verification_other">{{ form.fund_verification_other.label }}:</label> {{ form.fund_verification_other }}
+            </div>
+
+            <div id="loan_offer">
+                <div id="loan">
+                    <h3>First Loan</h3>
+                    {{ form.first_loan_amount.label }}: {{ form.first_loan_amount }}<br>
+                    Loan Type:
+                    {{ form.first_loan_type }}
+                    <label id="first_loan_type_other">{{ form.first_loan_type_other.label }}:</label> {{ form.first_loan_type_other }}<br><br>
+                    {{ form.first_loan_fixed_rate.label }}: {{ form.first_loan_fixed_rate }}<br><br>
+                    {{ form.first_loan_adjustable_loan_rate.label }}: {{ form.first_loan_adjustable_loan_rate }}<br><br>
+                    {{ form.first_loan_max_points.label }}: {{ form.first_loan_max_points }}<br><br>
+                    {{ form.down_payment.label }}:  {{ form.down_payment }}<br><br>
+                    {{ form.down_payment_days.label }}: {{ form.down_payment_days }}<br>
+                    Do you have a second loan? {{ form.second_loan }}<br><br>
+                    
+                    <div id="second_loan">
+                        <h3>Second Loan</h3>
+                        {{ form.second_loan_amount.label }}: {{ form.second_loan_amount }}<br>
+                        Loan Type:
+                        {{ form.second_loan_type }}
+                        <label id="second_loan_type_other">{{ form.second_loan_type_other.label }}:</label> {{ form.second_loan_type_other }}<br><br>
+                        {{ form.second_loan_fixed_rate.label }}: {{ form.second_loan_fixed_rate }}<br><br>
+                        {{ form.second_loan_adjustable_loan_rate.label }}: {{ form.second_loan_adjustable_loan_rate }}<br><br>
+                        {{ form.second_loan_max_points.label }}: {{ form.second_loan_max_points }}<br><br>
+                    </div>
+                    
+                    Is there an appraisal contingency? {{ form.appraisal_contingency }}
+                    <label id="appraisal_contingency"><br><br>{{ form.appraisal_contingency_days.label }}:</label> {{ form.appraisal_contingency_days }}<br>
+                    {{ form.loan_prequalification_days.label }}: {{ form.loan_prequalification_days }}<br>
+                    Is there a loan contingency? {{ form.loan_contingency }}<br>
+                    <label id="loan_contingency">{{ form.loan_contingency_days.label }}:</label> {{ form.loan_contingency_days }}
+                </div>
+            </div>
         </div>
 
         <div class="page">
@@ -50,20 +87,101 @@
 
     <script src="{% static 'scripts/scripts.js' %}"></script>
     <script>
-        // Down payment
-        document.getElementById("id_payment_type_0").addEventListener("click", hide_down_payment);
-        document.getElementById("id_payment_type_1").addEventListener("click", show_down_payment);
+        // Payment Type
+        document.getElementById("id_payment_type_0").addEventListener("click", show_cash_offer);
+        document.getElementById("id_payment_type_1").addEventListener("click", show_loan_offer);
 
-        function hide_down_payment() {
-            document.getElementById("id_down_payment_label").style.display = "none"
-            document.getElementById("id_down_payment").style.display = "none";
-            document.getElementById("id_down_payment").value = -1;
+        function show_cash_offer() {
+            document.getElementById("cash_offer").style.display = "inline";
+            document.getElementById("loan_offer").style.display = "none";
         }
 
-        function show_down_payment() {
-            document.getElementById("id_down_payment_label").style.display = "inline";
-            document.getElementById("id_down_payment").style.display = "inline";
-            document.getElementById("id_down_payment").value = null;
+        function show_loan_offer() {
+            document.getElementById("loan_offer").style.display = "inline";
+            document.getElementById("cash_offer").style.display = "none";
+        }
+
+        // Additional Information Cash
+        document.getElementById("id_fund_verification_0").addEventListener("click", hide_additional_information);
+        document.getElementById("id_fund_verification_1").addEventListener("click", show_additional_information);
+
+        function hide_additional_information() {
+            document.getElementById("fund_verification_other").style.display = "none";
+            document.getElementById("id_fund_verification_other").style.display = "none";
+            document.getElementById("id_fund_verification_other").value = null;
+        }
+
+        function show_additional_information() {
+            document.getElementById("fund_verification_other").style.display = "inline";
+            document.getElementById("id_fund_verification_other").style.display = "inline";
+        }
+
+        // Additional Information First Loan
+        document.getElementById("id_first_loan_type").addEventListener("click", first_loan_type);
+        
+        function first_loan_type() {
+            if (document.getElementById("id_first_loan_type_5").checked) {
+                document.getElementById("first_loan_type_other").style.display = "inline";
+                document.getElementById("id_first_loan_type_other").style.display = "inline";
+            }
+            else {
+                document.getElementById("first_loan_type_other").style.display = "none";
+                document.getElementById("id_first_loan_type_other").style.display = "none";
+            }
+        }
+
+        // Second Loan
+        document.getElementById("id_second_loan").addEventListener("click", second_loan_checkbox);
+
+        function second_loan_checkbox() {
+            if (document.getElementById("id_second_loan").checked) {
+                document.getElementById("second_loan").style.display = "inline";
+            }
+            else {
+                document.getElementById("second_loan").style.display = "none";
+            }
+        }
+
+        // Additional Information Second Loan
+        document.getElementById("id_second_loan_type").addEventListener("click", second_loan_type);
+        
+        function second_loan_type() {
+            if (document.getElementById("id_second_loan_type_5").checked) {
+                document.getElementById("second_loan_type_other").style.display = "inline";
+                document.getElementById("id_second_loan_type_other").style.display = "inline";
+            }
+            else {
+                document.getElementById("second_loan_type_other").style.display = "none";
+                document.getElementById("id_second_loan_type_other").style.display = "none";
+            }
+        }
+
+        // Appraisal Contingency
+        document.getElementById("id_appraisal_contingency").addEventListener("click", appraisal_contingency_checkbox);
+        
+        function appraisal_contingency_checkbox() {
+            if (document.getElementById("id_appraisal_contingency").checked) {
+                document.getElementById("appraisal_contingency").style.display = "inline";
+                document.getElementById("id_appraisal_contingency_days").style.display = "inline";
+            }
+            else {
+                document.getElementById("appraisal_contingency").style.display = "none";
+                document.getElementById("id_appraisal_contingency_days").style.display = "none";
+            }
+        }
+
+        // Loan Contingency
+        document.getElementById("id_loan_contingency").addEventListener("click", loan_contingency_checkbox);
+        
+        function loan_contingency_checkbox() {
+            if (document.getElementById("id_loan_contingency").checked) {
+                document.getElementById("loan_contingency").style.display = "inline";
+                document.getElementById("id_loan_contingency_days").style.display = "inline";
+            }
+            else {
+                document.getElementById("loan_contingency").style.display = "none";
+                document.getElementById("id_loan_contingency_days").style.display = "none";
+            }
         }
 
         // Escrow Dose Date

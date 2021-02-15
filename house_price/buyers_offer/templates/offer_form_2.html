@@ -1,0 +1,66 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block content %}
+<form action="" method="POST" id="form" class="buyers_offer_form">
+    {% csrf_token %}
+    <h2>Finance Details</h2>
+    <div class="page">
+        <h3>Deposit</h3>
+        {{ form.initial_deposit.label }}: {{ form.initial_deposit }}<br>
+        Deposit Payment: {{ form.deposit_payment_type }}
+        <label id="deposit_payment">{{ form.deposit_payment_type_other.label }}:</label> {{ form.deposit_payment_type_other }}<br>
+        Deposit Due: {{ form.deposit_due }}
+        <label id="deposit_due">{{ form.deposit_due_other.label }}:</label> {{ form.deposit_due_other }}
+    </div>
+
+    <div class="page">
+        <h3>Additional Finance Terms</h3>
+        {{ form.additional_terms }}
+    </div>
+
+    <div class="page">
+        <h3>Sale</h3>
+        Is this agreement contingent upon sale of any property owned by the buyer?<br>
+        {{ form.agreement_contingency }}
+    </div>
+
+    <div class="page">
+        <h3>Other Terms</h3>
+        {{ form.other_terms }}
+    </div>
+
+    <button type="button" id="previous_button" onclick="nextPrev(-1)">Previous</button>
+    <button type="button" id="next_button" onclick="nextPrev(1)">Next</button>
+</form>
+<script src="{% static 'scripts/scripts.js' %}"></script>
+<script>
+    // Deposit Payment
+    document.getElementById("id_deposit_payment_type").addEventListener("click", deposit_payment_checkbox);
+
+    function deposit_payment_checkbox() {
+        if (document.getElementById("id_deposit_payment_type_2").checked) {
+            document.getElementById("id_deposit_payment_type_other").style.display = "inline";
+            document.getElementById("deposit_payment").style.display = "inline";
+        }
+        else {
+            document.getElementById("id_deposit_payment_type_other").style.display = "none";
+            document.getElementById("deposit_payment").style.display = "none";
+        }
+    }
+
+    // Deposit Due
+    document.getElementById("id_deposit_due").addEventListener("click", deposit_due_checkbox);
+
+    function deposit_due_checkbox() {
+        if (document.getElementById("id_deposit_due_1").checked) {
+            document.getElementById("id_deposit_due_other").style.display = "inline";
+            document.getElementById("deposit_due").style.display = "inline";
+        }
+        else {
+            document.getElementById("id_deposit_due_other").style.display = "none";
+            document.getElementById("deposit_due").style.display = "none";
+        }
+    }
+</script>
+{% endblock %}
