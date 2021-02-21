@@ -100,5 +100,46 @@ class BuyersOfferForm2(forms.Form):
     deposit_due_other = forms.CharField(max_length=50, required=False, label="Additional Information")
     
     additional_terms = forms.CharField(max_length=50, required=False, label="Additional Terms")
-    agreement_contingency = buyer_agent = forms.BooleanField(widget=forms.CheckboxInput(), required=False, label="Agreement Contingency")
+    agreement_contingency = forms.BooleanField(widget=forms.CheckboxInput(), required=False, label="Agreement Contingency")
     other_terms = forms.CharField(max_length=100, label="Other Terms")
+
+class BuyersOfferForm3(forms.Form):
+    COST_ALLOCATION_TYPES = (
+        ("Buyer", "Buyer"),
+        ("Seller", "Seller")
+    )
+
+    COST_ALLOCATION_TYPES_2 = (
+        ("Buyer", "Buyer"),
+        ("Seller", "Seller"),
+        ("Both", "Both")
+    )
+
+    natural_hazard = forms.ChoiceField(widget=forms.RadioSelect, choices=COST_ALLOCATION_TYPES, required=False)
+    tax_report = forms.BooleanField(widget=forms.CheckboxInput(), required=False, label="Tax Report")
+    environmental_report = forms.BooleanField(widget=forms.CheckboxInput(), required=False, label="Environmental Report")
+    insurance_claim_report = forms.BooleanField(widget=forms.CheckboxInput(), required=False, label="Insurance Claim Report")
+    termite_inspection_report = forms.ChoiceField(widget=forms.RadioSelect, choices=COST_ALLOCATION_TYPES)
+    smoke_alarm = forms.ChoiceField(widget=forms.RadioSelect, choices=COST_ALLOCATION_TYPES)
+    government_inspection = forms.ChoiceField(widget=forms.RadioSelect, choices=COST_ALLOCATION_TYPES)
+    government_retrofit = forms.ChoiceField(widget=forms.RadioSelect, choices=COST_ALLOCATION_TYPES)
+    escrow_fee = forms.ChoiceField(widget=forms.RadioSelect, choices=COST_ALLOCATION_TYPES_2)
+    escrow_holder = forms.ChoiceField(widget=forms.RadioSelect, choices=COST_ALLOCATION_TYPES, initial="Seller")
+    escrow_general_provision = forms.IntegerField(initial=5, label="Initial Deposit")
+    title_insurance = forms.ChoiceField(widget=forms.RadioSelect, choices=COST_ALLOCATION_TYPES, initial="Seller")
+    title_policy = forms.CharField(max_length=50, initial="Seller's Choice", label="Additional Information")
+    county_transfer = forms.ChoiceField(widget=forms.RadioSelect, choices=COST_ALLOCATION_TYPES, initial="Seller")
+    city_transfer = forms.ChoiceField(widget=forms.RadioSelect, choices=COST_ALLOCATION_TYPES, initial="Seller")
+    hoa_transfer = forms.ChoiceField(widget=forms.RadioSelect, choices=COST_ALLOCATION_TYPES, initial="Seller")
+    hoa_document = forms.ChoiceField(widget=forms.RadioSelect, choices=COST_ALLOCATION_TYPES, initial="Seller")
+    private_transfer = forms.ChoiceField(widget=forms.RadioSelect, choices=COST_ALLOCATION_TYPES, initial="Seller")
+    section_1_termite = forms.ChoiceField(widget=forms.RadioSelect, choices=COST_ALLOCATION_TYPES, initial="Seller")
+    tc_fee = forms.ChoiceField(widget=forms.RadioSelect, choices=COST_ALLOCATION_TYPES, initial="Buyer")
+    warranty_waive = forms.BooleanField(widget=forms.CheckboxInput(), required=False, label="Waive Warranty")
+    warranty_plan = forms.ChoiceField(widget=forms.RadioSelect, choices=COST_ALLOCATION_TYPES, initial="Seller", required=False)
+    warranty_maximal_cost = forms.IntegerField(label="Warranty Maximal Cost", required=False)
+    upgraded_warranty = forms.BooleanField(widget=forms.CheckboxInput(), required=False, label="Upgraded Warranty")
+    warranty_company = forms.CharField(max_length=50, required=False, label="Warranty Company")
+    warranty_air_conditioner = forms.BooleanField(widget=forms.CheckboxInput(), required=False, label="Air Conditioner Warranty")
+    warranty_pool_spa = forms.BooleanField(widget=forms.CheckboxInput(), required=False, label="Pool/Spa Warranty")
+    warranty_buyers_choice = forms.BooleanField(widget=forms.CheckboxInput(), required=False, label="Buyer's Choice Warranty")

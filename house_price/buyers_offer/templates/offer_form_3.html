@@ -1,0 +1,82 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block content %}
+<form action="" method="POST" id="form" class="buyers_offer_form">
+    {% csrf_token %}
+    <h2>Cost Allocation Details</h2>
+    <div class="page">
+        <h3>Inspections, Reports and Certificates</h3>
+        Who will pay for a natural hazard zone disclosure report? {{ form.natural_hazard }}
+        <div id="natural_hazard">
+            Would it include a tax report? {{ form.tax_report }}<br>
+            Would it include a environmental report? {{ form.environmental_report }}<br>
+            Would it include an insurance claim report? {{ form.insurance_claim_report }}<br><br>
+            Who will pay for termite inspection report? {{ form.termite_inspection_report }}
+        </div>
+    </div>
+
+    <div class="page">
+        <h3>Government Requirements and Retrofit</h3>
+        Who will pay for smoke alarm and carbon monoxide device installment? {{ form.smoke_alarm }}
+        Who will pay for the cost of compliance with any other minimum mandatory government inspections and reports? {{ form.government_inspection }}
+        Why will pay for the cost of compliance with any other minimum mandatory government retrofit standards? {{ form.government_retrofit }}
+    </div>
+
+    <div class="page">
+        <h3>Escrow and Title</h3>
+        Who will pay escrow fee? {{ form.escrow_fee }}
+        Who will choose the escrow holder? {{ form.escrow_holder }}
+        When to sign and return Escrow Holder’s general provisions? {{ form.escrow_general_provision }}<br>
+        Who will pay for owner’s title insurance policy? {{ form.title_insurance }}
+        Which institute will prepare the owners’ title policy? {{ form.title_policy }}
+    </div>
+
+    <div class="page">
+        <h3>Other Costs</h3>
+        Who will pay county transfer tax or fee? {{ form.county_transfer }}
+        Who will pay city transfer tax or fee? {{ form.city_transfer }}
+        Who will pay HOA transfer fee? {{ form.hoa_transfer }}
+        Who will pay HOA document fee? {{ form.hoa_document }}
+        Who will pay for any private transfer fee? {{ form.private_transfer }}
+        Who will pay for Section 1 Termite clearance? {{ form.section_1_termite }}
+        Who will pay for TC fee? {{ form.tc_fee }}
+        Would the buyer waive the warranty? {{ form.warranty_waive }}<br>
+        <div id="warranty_waive">
+            Who will pay for the cost or a one-year home warranty plan? {{ form.warranty_plan }}
+            What’s the maximal cost for the warranty? {{ form.warranty_maximal_cost }}<br>
+            Is it a upgraded warranty? {{ form.upgraded_warranty }}<br>
+            Which warranty company will be used? {{ form.warranty_company }}<br>
+            Would the warranty cover air conditioner? {{ form.warranty_air_conditioner }}<br>
+            Would the warranty cover Pool/Spa? {{ form.warranty_pool_spa }}<br>
+            Shall the warranty be up to Buyer’s choice? {{ form.warranty_buyers_choice }}
+        </div>
+    </div>
+
+    <button type="button" id="previous_button" onclick="nextPrev(-1)">Previous</button>
+    <button type="button" id="next_button" onclick="nextPrev(1)">Next</button>
+</form>
+<script src="{% static 'scripts/scripts.js' %}"></script>
+<script>
+    // Natural Hazard
+    document.getElementById("id_natural_hazard").addEventListener("click", natural_hazard_checkbox);
+
+    function natural_hazard_checkbox() {
+        if (document.getElementById("id_natural_hazard_0").checked || document.getElementById("id_natural_hazard_1").checked) {
+            document.getElementById("natural_hazard").style.display = "inline";
+        }
+    }
+
+    // Deposit Due
+    document.getElementById("id_warranty_waive").addEventListener("click", warranty_waive_checkbox);
+
+    function warranty_waive_checkbox() {
+        if (document.getElementById("id_warranty_waive").checked) {
+            document.getElementById("warranty_waive").style.display = "none";
+        }
+        else {
+            document.getElementById("warranty_waive").style.display = "inline";
+        }
+    }
+</script>
+{% endblock %}

@@ -157,6 +157,129 @@ def fill_pdf(application_name, pdf_name, buyer_id):
 
     data_1['other terms page 2'] = buyers_offer_obj.other_terms
 
+    # Data Allocation Details
+    if buyers_offer_obj.natural_hazard == 'Buyer':
+        data_2['Check Box37'] = '/Yes'
+
+        if buyers_offer_obj.environmental_report:
+            data_2['Check Box39'] = '/Yes'
+
+        if buyers_offer_obj.insurance_claim_report:
+            data_2['Check Box40'] = '/Yes'
+            data_1['hazard disclosure report other payments'] = 'Insurance Claim Report'
+            data_1['hazard disclosure report prepared by'] = 'Third Party Vendor'
+
+        if buyers_offer_obj.termite_inspection_report == 'Buyer':
+            data_2['Check Box41'] = '/Yes'
+            data_1['report 2'] = 'Termite Inspection Report'
+            data_1['report 2 prepared by'] = 'Licensed Third Party'
+        else:
+            data_2['Check Box42'] = '/Yes'
+            data_1['report 2'] = 'Termite Inspection Report'
+            data_1['report 2 prepared by'] = 'Licensed Third Party'
+    else:
+        data_2['Check Box38'] = '/Yes'
+    
+    if buyers_offer_obj.smoke_alarm == 'Buyer':
+        data_2['Check Box45'] = '/Yes'
+    else:
+        data_2['Check Box46'] = '/Yes'
+
+    if buyers_offer_obj.government_inspection == 'Buyer':
+        data_2['Check Box47'] = '/Yes'
+    else:
+        data_2['Check Box48'] = '/Yes'
+
+    if buyers_offer_obj.government_retrofit == 'Buyer':
+        data_2['Check Box49'] = '/Yes'
+    else:
+        data_2['Check Box50'] = '/Yes'
+
+    if buyers_offer_obj.escrow_fee == 'Buyer':
+        data_2['Check Box51'] = '/Yes'
+    elif buyers_offer_obj.escrow_fee == 'Seller':
+        data_2['Check Box52'] = '/Yes'
+    else:
+        data_2['Check Box51'] = '/Yes'
+        data_2['Check Box52'] = '/Yes'
+        data_1['buyer/seller shall pay escrow fee'] = 'each to pay their own'
+
+    if buyers_offer_obj.escrow_holder == 'Buyer':
+        data_1['escrow holder shall be'] = "Seller's choice"
+    else:
+        data_1['escrow holder shall be'] = "Buyer's choice"
+
+    data_1['parties shall within number of days'] = buyers_offer_obj.escrow_general_provision
+
+    if buyers_offer_obj.title_insurance == 'Buyer':
+        data_2['Check Box53'] = '/Yes'
+    else:
+        data_2['Check Box54'] = '/Yes'
+
+    data_1['title policy shall be issued by'] = buyers_offer_obj.title_policy
+
+    if buyers_offer_obj.county_transfer == 'Buyer':
+        data_2['Check Box55'] = '/Yes'
+    else:
+        data_2['Check Box56'] = '/Yes'
+
+    if buyers_offer_obj.city_transfer == 'Buyer':
+        data_2['Check Box57'] = '/Yes'
+    else:
+        data_2['Check Box58'] = '/Yes'
+
+    if buyers_offer_obj.hoa_transfer == 'Buyer':
+        data_2['Check Box59'] = '/Yes'
+    else:
+        data_2['Check Box60'] = '/Yes'
+
+    if buyers_offer_obj.hoa_document == 'Buyer':
+        data_2['Check Box61'] = '/Yes'
+    else:
+        data_2['Check Box62'] = '/Yes'
+
+    if buyers_offer_obj.private_transfer == 'Buyer':
+        data_2['Check Box63'] = '/Yes'
+    else:
+        data_2['Check Box64'] = '/Yes'
+
+    if buyers_offer_obj.section_1_termite == 'Buyer':
+        data_2['Check Box65'] = '/Yes'
+    else:
+        data_2['Check Box66'] = '/Yes'
+    data_1['other costs 8'] = 'Section 1 Termite Clearance'
+
+    if buyers_offer_obj.tc_fee == 'Buyer':
+        data_2['Check Box67'] = '/Yes'
+    else:
+        data_2['Check Box68'] = '/Yes'
+    data_1['other costs 9'] = 'Professional TC Fee'
+
+    if buyers_offer_obj.warranty_waive:
+        data_2['Check Box75'] = '/Yes'
+    else:
+        if buyers_offer_obj.warranty_plan == 'Buyer':
+            data_2['Check Box69'] = '/Yes'
+        else:
+            data_2['Check Box70'] = '/Yes'
+        data_1['home warrant not exceed $'] = buyers_offer_obj.warranty_maximal_cost
+        
+        if buyers_offer_obj.upgraded_warranty:
+            data_1['Check Box71'] = '/Yes'
+
+        data_1['home warranty issued by'] = buyers_offer_obj.warranty_company
+        
+        if buyers_offer_obj.warranty_air_conditioner:
+            data_2['Check Box72'] = '/Yes'
+
+        if buyers_offer_obj.warranty_pool_spa:
+            data_2['Check Box73'] = '/Yes'
+
+        if buyers_offer_obj.warranty_buyers_choice:
+            data_2['Check Box74'] = '/Yes'
+            data_2['including other coverages'] = "Buyer's Choice"
+
+
     reader = PdfFileReader(application_name + '/static/pdf/' + pdf_name + '.pdf')
     writer = PdfFileWriter()
     set_need_appearances_writer(writer)

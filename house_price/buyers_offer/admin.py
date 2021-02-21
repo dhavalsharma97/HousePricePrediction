@@ -31,13 +31,16 @@ class BuyersOfferAdmin(admin.ModelAdmin):
             'fields': ('escrow_date', 'escrow_days')
         }),
         ('Agent Details', {
-            'fields': ('ad', 'buyer_agent', 'dual_brokerage', 'seller_agent', 'prbs')
+            'fields': ('ad', 'buyer_agent', 'buyer_brokerage_firm', 'buyer_brokerage_license_number', 'buyer_agent_name', 'buyer_agent_license_number', 'dual_brokerage', 'seller_agent', 'seller_brokerage_firm', 'seller_brokerage_license_number', 'seller_agent_name', 'seller_agent_license_number', 'prbs')
         }),
         ('Deposit Details', {
             'fields': ('initial_deposit', 'deposit_payment_type', 'deposit_payment_type_other', 'deposit_due', 'deposit_due_other', 'additional_terms')
         }),
         ('Sale Details', {
             'fields': ('agreement_contingency', 'other_terms')
+        }),
+        ('Cost Allocation Details', {
+            'fields': ('natural_hazard', 'tax_report', 'environmental_report', 'insurance_claim_report', 'termite_inspection_report', 'smoke_alarm', 'government_inspection', 'government_retrofit', 'escrow_fee', 'escrow_holder', 'escrow_general_provision', 'title_insurance', 'title_policy', 'county_transfer', 'city_transfer', 'hoa_transfer', 'hoa_document', 'private_transfer', 'section_1_termite', 'tc_fee', 'warranty_waive', 'warranty_plan', 'warranty_maximal_cost', 'upgraded_warranty', 'warranty_company', 'warranty_air_conditioner', 'warranty_pool_spa', 'warranty_buyers_choice')
         })
     )
 

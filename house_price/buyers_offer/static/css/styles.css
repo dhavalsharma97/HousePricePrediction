@@ -68,7 +68,7 @@ input[type=button]:hover, input[type=submit]:hover, button:hover {
 	color: black;
 }
 
-.page, #cash_offer, #loan_offer, #id_escrow_date, #id_escrow_days, #buyer_agent, #seller_agent, #fund_verification_other, #id_fund_verification_other, #second_loan, #first_loan_type_other, #id_first_loan_type_other, #second_loan_type_other, #id_second_loan_type_other, #id_deposit_payment_type_other, #deposit_payment, #id_deposit_due_other, #deposit_due, #appraisal_contingency, #id_appraisal_contingency_days, #loan_contingency, #id_loan_contingency_days {
+.page, #cash_offer, #loan_offer, #id_escrow_date, #id_escrow_days, #buyer_agent, #seller_agent, #fund_verification_other, #id_fund_verification_other, #second_loan, #first_loan_type_other, #id_first_loan_type_other, #second_loan_type_other, #id_second_loan_type_other, #id_deposit_payment_type_other, #deposit_payment, #id_deposit_due_other, #deposit_due, #appraisal_contingency, #id_appraisal_contingency_days, #loan_contingency, #id_loan_contingency_days, #natural_hazard {
     display: none;
 }
 

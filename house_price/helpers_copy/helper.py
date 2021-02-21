@@ -71,7 +71,7 @@ def tick_buttons(page, fields):
 
 def fill_pdf(application_name, pdf_name, form_data):
     reader = PdfFileReader(pdf_name + '.pdf')
-    first_page = reader.getPage(1)
+    first_page = reader.getPage(2)
 
     print(reader.getFields())
 
@@ -108,10 +108,10 @@ def fill_pdf(application_name, pdf_name, form_data):
     data_2['Check Box7'] = '/Yes'
     data_1['all cash offer number of days'] = 'Test'
     data_1['second load amount'] = 'Test'
-    data_1['loan application number of days after acceptance'] = '/Yes'
-    data_1['other terms page 2'] = 'Test'
+    data_1['Check Box'] = '/Yes'
+    data_1['including other coverages'] = 'Test'
     
-    data_2['Check Box1'] = '/Yes'
+    data_2['Check Box73'] = '/Yes'
     data_2['undefined_2'] = '/On'
     data_2['the Seller exclusively or'] = '/On'
     data_2['Listing Agent is the agent of check one'] = '/On'
@@ -124,7 +124,8 @@ def fill_pdf(application_name, pdf_name, form_data):
     writer.addPage(first_page)
 
     for j in range(0, len(first_page['/Annots'])):
-        print(first_page['/Annots'][j].getObject())
+        #print(first_page['/Annots'][j].getObject())
+        pass
 
     with open(pdf_name + '_filled.pdf',"wb") as new:
         writer.write(new)
@@ -148,4 +149,4 @@ fill_pdf('buyers_offer', 'purchase_agreement', {
 pdfobject=open('purchase_agreement_filled.pdf','rb')
 pdf=pypdf.PdfFileReader(pdfobject)
 print()
-print(pdf.getFormTextFields())
+#print(pdf.getFormTextFields())

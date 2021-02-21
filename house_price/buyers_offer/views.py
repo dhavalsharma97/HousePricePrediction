@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from helpers.helper import fill_pdf
-from buyers_offer.forms import BuyersOfferForm, BuyersOfferForm1, BuyersOfferForm2
+from buyers_offer.forms import BuyersOfferForm, BuyersOfferForm1, BuyersOfferForm2, BuyersOfferForm3
 from buyers_offer.models import BuyersOffer
 
 def index(request):
@@ -187,3 +187,69 @@ def offer_form_confirm_2(request):
 
     # Render the HTML template offer_form_confirm.html
     return render(request, 'offer_form_confirm_2.html')
+
+
+def offer_form_3(request):
+    """View function for buyers offer form page of site"""
+    # If this is a POST request then process the Form data
+    if request.method == 'POST':
+        # Create a form instance and populate it with data from the request (binding):
+        form = BuyersOfferForm3(request.POST)
+
+        # Check if the form is valid:
+        if form.is_valid():
+            # Save the record to database
+            buyers_offer_obj = BuyersOffer.objects.get(pk=request.session['buyer'])
+
+            buyers_offer_obj.natural_hazard = form.cleaned_data['natural_hazard']
+            buyers_offer_obj.tax_report = form.cleaned_data['tax_report']
+            buyers_offer_obj.environmental_report = form.cleaned_data['environmental_report']
+            buyers_offer_obj.insurance_claim_report = form.cleaned_data['insurance_claim_report']
+            buyers_offer_obj.termite_inspection_report = form.cleaned_data['termite_inspection_report']
+            buyers_offer_obj.smoke_alarm = form.cleaned_data['smoke_alarm']
+            buyers_offer_obj.government_inspection = form.cleaned_data['government_inspection']
+            buyers_offer_obj.government_retrofit = form.cleaned_data['government_retrofit']
+            buyers_offer_obj.escrow_fee = form.cleaned_data['escrow_fee']
+            buyers_offer_obj.escrow_holder = form.cleaned_data['escrow_holder']
+            buyers_offer_obj.escrow_general_provision = form.cleaned_data['escrow_general_provision']
+            buyers_offer_obj.title_insurance = form.cleaned_data['title_insurance']
+            buyers_offer_obj.title_policy = form.cleaned_data['title_policy']
+            buyers_offer_obj.county_transfer = form.cleaned_data['county_transfer']
+            buyers_offer_obj.city_transfer = form.cleaned_data['city_transfer']
+            buyers_offer_obj.hoa_transfer = form.cleaned_data['hoa_transfer']
+            buyers_offer_obj.hoa_document = form.cleaned_data['hoa_document']
+            buyers_offer_obj.private_transfer = form.cleaned_data['private_transfer']
+            buyers_offer_obj.section_1_termite = form.cleaned_data['section_1_termite']
+            buyers_offer_obj.tc_fee = form.cleaned_data['tc_fee']
+            buyers_offer_obj.warranty_waive = form.cleaned_data['warranty_waive']
+            buyers_offer_obj.warranty_plan = form.cleaned_data['warranty_plan']
+            buyers_offer_obj.warranty_maximal_cost = form.cleaned_data['warranty_maximal_cost']
+            buyers_offer_obj.upgraded_warranty = form.cleaned_data['upgraded_warranty']
+            buyers_offer_obj.warranty_company = form.cleaned_data['warranty_company']
+            buyers_offer_obj.warranty_air_conditioner = form.cleaned_data['warranty_air_conditioner']
+            buyers_offer_obj.warranty_pool_spa = form.cleaned_data['warranty_pool_spa']
+            buyers_offer_obj.warranty_buyers_choice = form.cleaned_data['warranty_buyers_choice']
+            buyers_offer_obj.save()
+
+            # Generate PDF
+            fill_pdf('buyers_offer', 'purchase_agreement', request.session['buyer'])
+
+            # Redirect to a new URL:
+            return HttpResponseRedirect(reverse('offerformconfirm3'))
+
+    # If this is a GET (or any other method) create the default form.
+    else:
+        form = BuyersOfferForm3()
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'offer_form_3.html', context)
+
+
+def offer_form_confirm_3(request):
+    """View function for buyers offer confirmation page of site"""
+
+    # Render the HTML template offer_form_confirm.html
+    return render(request, 'offer_form_confirm_3.html')
