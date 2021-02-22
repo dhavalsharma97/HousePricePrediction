@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from helpers.helper import fill_pdf
-from buyers_offer.forms import BuyersOfferForm, BuyersOfferForm1, BuyersOfferForm2, BuyersOfferForm3
+from buyers_offer.forms import BuyersOfferForm, BuyersOfferForm1, BuyersOfferForm2, BuyersOfferForm3, BuyersOfferForm4
 from buyers_offer.models import BuyersOffer
 
 def index(request):
@@ -139,7 +139,7 @@ def offer_form_1(request):
 def offer_form_confirm_1(request):
     """View function for buyers offer confirmation page of site"""
 
-    # Render the HTML template offer_form_confirm.html
+    # Render the HTML template offer_form_confirm_1.html
     return render(request, 'offer_form_confirm_1.html')
 
 
@@ -185,7 +185,7 @@ def offer_form_2(request):
 def offer_form_confirm_2(request):
     """View function for buyers offer confirmation page of site"""
 
-    # Render the HTML template offer_form_confirm.html
+    # Render the HTML template offer_form_confirm_2.html
     return render(request, 'offer_form_confirm_2.html')
 
 
@@ -251,5 +251,75 @@ def offer_form_3(request):
 def offer_form_confirm_3(request):
     """View function for buyers offer confirmation page of site"""
 
-    # Render the HTML template offer_form_confirm.html
+    # Render the HTML template offer_form_confirm_3.html
     return render(request, 'offer_form_confirm_3.html')
+
+
+def offer_form_4(request):
+    """View function for buyers offer form page of site"""
+    # If this is a POST request then process the Form data
+    if request.method == 'POST':
+        # Create a form instance and populate it with data from the request (binding):
+        form = BuyersOfferForm4(request.POST)
+
+        # Check if the form is valid:
+        if form.is_valid():
+            # Save the record to database
+            buyers_offer_obj = BuyersOffer.objects.get(pk=request.session['buyer'])
+
+            buyers_offer_obj.stove = form.cleaned_data['stove']
+            buyers_offer_obj.exceptions_1 = form.cleaned_data['exceptions_1']
+            buyers_offer_obj.refrigerators = form.cleaned_data['refrigerators']
+            buyers_offer_obj.exceptions_2 = form.cleaned_data['exceptions_2']
+            buyers_offer_obj.dryers_washers = form.cleaned_data['dryers_washers']
+            buyers_offer_obj.exceptions_3 = form.cleaned_data['exceptions_3']
+            buyers_offer_obj.additional_items = form.cleaned_data['additional_items']
+            buyers_offer_obj.phone_automation_system = form.cleaned_data['phone_automation_system']
+            buyers_offer_obj.not_owned_seller = form.cleaned_data['not_owned_seller']
+            buyers_offer_obj.buyer_primary_residence = form.cleaned_data['buyer_primary_residence']
+            buyers_offer_obj.buyer_possession_1 = form.cleaned_data['buyer_possession_1']
+            buyers_offer_obj.buyer_possession_2 = form.cleaned_data['buyer_possession_2']
+            buyers_offer_obj.buyer_possession_3 = form.cleaned_data['buyer_possession_3']
+            buyers_offer_obj.property_vacant_1 = form.cleaned_data['property_vacant_1']
+            buyers_offer_obj.property_vacant_2 = form.cleaned_data['property_vacant_2']
+            buyers_offer_obj.condominium = form.cleaned_data['condominium']
+            buyers_offer_obj.deliver_report = form.cleaned_data['deliver_report']
+            buyers_offer_obj.inspection_contingency = form.cleaned_data['inspection_contingency']
+            buyers_offer_obj.remove_inspection_contingency = form.cleaned_data['remove_inspection_contingency']
+            buyers_offer_obj.property_access = form.cleaned_data['property_access']
+            buyers_offer_obj.days_perform = form.cleaned_data['days_perform']
+            buyers_offer_obj.cancel_agreement = form.cleaned_data['cancel_agreement']
+            buyers_offer_obj.final_verification = form.cleaned_data['final_verification']
+            buyers_offer_obj.expiration_date = form.cleaned_data['expiration_date']
+            buyers_offer_obj.expiration_time = form.cleaned_data['expiration_time']
+            buyers_offer_obj.save()
+
+            # Generate PDF
+            fill_pdf('buyers_offer', 'purchase_agreement', request.session['buyer'])
+
+            # Redirect to a new URL:
+            return HttpResponseRedirect(reverse('offerformconfirm4'))
+
+    # If this is a GET (or any other method) create the default form.
+    else:
+        form = BuyersOfferForm4()
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'offer_form_4.html', context)
+
+
+def offer_form_confirm_4(request):
+    """View function for buyers offer confirmation page of site"""
+
+    # Render the HTML template offer_form_confirm_4.html
+    return render(request, 'offer_form_confirm_4.html')
+
+
+def offer_form_navigate(request):
+    """View function for buyers offer navigation page of site"""
+
+    # Render the HTML template offer_form_navigate.html
+    return render(request, 'offer_form_navigate.html')

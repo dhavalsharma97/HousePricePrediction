@@ -279,7 +279,57 @@ def fill_pdf(application_name, pdf_name, buyer_id):
             data_2['Check Box74'] = '/Yes'
             data_2['including other coverages'] = "Buyer's Choice"
 
+    if buyers_offer_obj.stove:
+        data_2['Check Box76'] = '/Yes'
+        data_1['all stoves except'] = buyers_offer_obj.exceptions_1
+    
+    if buyers_offer_obj.refrigerators:
+        data_2['Check Box77'] = '/Yes'
+        data_1['all refrigerators except'] = buyers_offer_obj.exceptions_2
 
+    if buyers_offer_obj.dryers_washers:
+        data_2['Check Box78'] = '/Yes'
+        data_1['all washer and dryers except'] = buyers_offer_obj.exceptions_3
+
+    data_1['4 Existing integrated phone and home automation systems including necessary components such as intranet and Internet'] = buyers_offer_obj.additional_items
+
+    if not buyers_offer_obj.phone_automation_system:
+        data_2['Check Box79'] = '/Yes'
+
+    data_1['except items and systems identified pursuant to 8B (5)'] = buyers_offer_obj.not_owned_seller
+
+    if not buyers_offer_obj.buyer_primary_residence:
+        data_2['Check Box81'] = '/Yes'
+
+    data_1['possession delivered time (i)'] = buyers_offer_obj.buyer_possession_1
+    
+    if buyers_offer_obj.buyer_possession_2:
+        data_2['Check Box84'] = '/Yes'
+        data_1['possession delivered days'] = buyers_offer_obj.buyer_possession_2
+
+    if buyers_offer_obj.buyer_possession_3:
+        data_2['Check Box85'] = '/Yes'
+        data_1['posession delivered time (ii)'] = buyers_offer_obj.buyer_possession_3
+
+    if not buyers_offer_obj.property_vacant_2:
+        data_1['property vacant days'] = buyers_offer_obj.property_vacant_1
+    else:
+        data_2['Check Box90'] = '/Yes'
+
+    data_1['condo disclosure days'] = buyers_offer_obj.condominium
+    data_1['seller has ______ days'] = buyers_offer_obj.deliver_report
+
+    if buyers_offer_obj.inspection_contingency:
+        data_2['Check Box91'] = '/Yes'
+        data_1['buyer has ______ days'] = buyers_offer_obj.remove_inspection_contingency
+
+    data_1['number of days access to property'] = buyers_offer_obj.property_access
+    data_1['notice to buyer or seller to perform'] = buyers_offer_obj.days_perform
+    data_1['final verification days'] = buyers_offer_obj.final_verification
+    data_1['expirate offer time'] = buyers_offer_obj.expiration_time
+    data_1['expiration offer date 2'] = buyers_offer_obj.expiration_date
+    
+    
     reader = PdfFileReader(application_name + '/static/pdf/' + pdf_name + '.pdf')
     writer = PdfFileWriter()
     set_need_appearances_writer(writer)

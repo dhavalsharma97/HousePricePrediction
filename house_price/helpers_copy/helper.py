@@ -71,7 +71,7 @@ def tick_buttons(page, fields):
 
 def fill_pdf(application_name, pdf_name, form_data):
     reader = PdfFileReader(pdf_name + '.pdf')
-    first_page = reader.getPage(2)
+    first_page = reader.getPage(8)
 
     print(reader.getFields())
 
@@ -109,9 +109,9 @@ def fill_pdf(application_name, pdf_name, form_data):
     data_1['all cash offer number of days'] = 'Test'
     data_1['second load amount'] = 'Test'
     data_1['Check Box'] = '/Yes'
-    data_1['including other coverages'] = 'Test'
+    data_1['expiration offer date 2'] = 'Test'
     
-    data_2['Check Box73'] = '/Yes'
+    data_2['Check Box91'] = '/Yes'
     data_2['undefined_2'] = '/On'
     data_2['the Seller exclusively or'] = '/On'
     data_2['Listing Agent is the agent of check one'] = '/On'

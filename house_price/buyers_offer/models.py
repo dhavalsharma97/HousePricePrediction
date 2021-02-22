@@ -155,6 +155,43 @@ class BuyersOffer(models.Model):
     warranty_pool_spa = models.BooleanField(null=True, help_text="Would the warranty cover pool/spa?")
     warranty_buyers_choice = models.BooleanField(null=True, help_text="Shall the warranty be up to buyer's choice?")
 
+    # Item Details
+    stove = models.BooleanField(null=True, help_text="Would the sale include all the stoves?")
+    exceptions_1 = models.CharField(max_length=100, null=True, help_text="Enter the exceptions")
+    refrigerators = models.BooleanField(null=True, help_text="Would the sale include all the refrigerators?")
+    exceptions_2 = models.CharField(max_length=100, null=True, help_text="Enter the exceptions")
+    dryers_washers = models.BooleanField(null=True, help_text="Would the sale include all the dryers and washers?")
+    exceptions_3 = models.CharField(max_length=100, null=True, help_text="Enter the exceptions")
+    additional_items = models.CharField(max_length=100, null=True, help_text="Enter the additional items")
+    phone_automation_system = models.BooleanField(null=True, default=True, help_text="Would the sale include all the refrigerators?")
+    not_owned_seller = models.CharField(max_length=100, null=True, help_text="Enter the items not owned by seller")
+
+    # Closing and Possession Details
+    buyer_primary_residence = models.BooleanField(null=True, default=True, help_text="Is the property the buyer's primary residence?")
+    buyer_possession_1 = models.CharField(max_length=100, null=True, help_text="Enter the time of close of escrow")
+    buyer_possession_2 = models.CharField(max_length=100, null=True, help_text="Enter the time of close of escrow")
+    buyer_possession_3 = models.CharField(max_length=100, null=True, help_text="Enter the time of close of escrow")
+    property_vacant_1 = models.IntegerField(null=True, help_text="Enter the number of days prior to close of escrow to vacant the property")
+    property_vacant_2 = models.BooleanField(null=True, help_text="Enter the number of days prior to close of escrow to vacant the property")
+
+    # Statutory and Disclosure Details
+    condominium = models.IntegerField(null=True, help_text="Enter the disclosure to buyer if the property is condominium")
+    
+    # Time Period Details
+    deliver_report = models.IntegerField(null=True, help_text="Enter the days after acceptance that seller has to deliver all the reports")
+    inspection_contingency = models.BooleanField(null=True, help_text="Enter the buyer's claim inspection contingency")
+    remove_inspection_contingency = models.IntegerField(null=True, help_text="Enter the days after acceptance that seller has to deliver all the reports")
+    property_access = models.IntegerField(null=True, help_text="Enter the days after acceptance that buyer shall have access to the property")
+    days_perform = models.IntegerField(null=True, help_text="Enter the days to perform")
+    cancel_agreement = models.IntegerField(null=True, help_text="Enter the days each party shall give the other party while cancelling this agreement")
+
+    # Verification Details
+    final_verification = models.IntegerField(null=True, help_text="When to make final verification of condition")
+
+    # Expiration of Offer Details
+    expiration_date = models.DateField(null=True, help_text="Enter the expiration date")
+    expiration_time = models.CharField(max_length=100, null=True, help_text="Enter the expiration time")
+
     class Meta:
         ordering = ['first_name', 'last_name']
 

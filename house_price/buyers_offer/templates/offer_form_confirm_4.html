@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block content %}
+    <h2>Congratulations on completing the initial offer</h2>
+
+    <p>
+        We will contact the seller with all the details. You can download the purchase agreement for your reference<br>
+        <a href="{% static 'pdf/purchase_agreement_filled.pdf' %}" download>
+            <button>Download</button>
+        </a>
+        <a href="{% url 'offerformnavigate' %}">
+            <button>Finish</button>
+        </a>
+    </p>
+{% endblock %}

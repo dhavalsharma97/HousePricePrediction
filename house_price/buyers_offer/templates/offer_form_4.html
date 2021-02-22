@@ -1,0 +1,120 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block content %}
+<form action="" method="POST" id="form" class="buyers_offer_form">
+    {% csrf_token %}
+    <h2>Step 5</h2>
+    <div class="page">
+        <h3>Item Details</h3>
+        Would the sale include all stoves? {{ form.stove }}<br>
+        Any Exceptions? {{ form.exceptions_1 }}<br>
+        Would the sale include all refrigerators? {{ form.refrigerators }}<br>
+        Any Exceptions? {{ form.exceptions_2 }}<br>
+        Would the sale include all dryers and washers? {{ form.dryers_washers }}<br>
+        Any Exceptions? {{ form.exceptions_3 }}<br>
+        What are the additional items? {{ form.additional_items }}<br>
+        Would the sale include integrated phone and home automation system? {{ form.phone_automation_system }}<br>
+        What items for sale are not owned by the seller? {{ form.not_owned_seller }}
+    </div>
+
+    <div class="page">
+        <h3>Closing and Possession Details</h3>
+        Is the property the buyer’s primary residence? {{ form.buyer_primary_residence }}<br><br>
+        When will the possession be delivered to Buyer?<br>
+        <button type="button" id="buyer_possession_1">On the day of escrow</button><br><br>
+        <div id="buyer_possession_1_content">At 6 PM (or {{ form.buyer_possession_1 }}) on the data of close of escrow<br></div>
+        <button type="button" id="buyer_possession_2">After day of escrow</button><br><br>
+        <div id="buyer_possession_2_content">No later than {{ form.buyer_possession_2 }} calendar days after close of escrow<br></div>
+        <button type="button" id="buyer_possession_3">Specific Date and Time</button><br><br>
+        <div id="buyer_possession_3_content">Date & Time {{ form.buyer_possession_3 }}<br><br></div>
+        How many days prior to close of escrow the property shall be vacant?<br>
+        <button type="button" id="option_1">Option 1</button><br><br>
+        <div id="option_1_content">{{ form.property_vacant_1 }}<br></div>
+        <button type="button" id="option_2">Option 2</button><br><br>
+        <div id="option_2_content">Tenant to remain in possession {{ form.property_vacant_2 }}</div>
+    </div>
+
+    <div class="page">
+        <h3>Statutory and Disclosure Details</h3>
+        When shall the seller disclose to buyer if the property is a Condominium or is located in a planned development?<br>
+        {{ form.condominium }}
+    </div>
+
+    <div class="page">
+        <h3>Time Period Details</h3>
+        How many days after acceptance the seller has to deliver all reports/disclosures? {{ form.deliver_report }}<br>
+        Would the buyers claim Inspection Contingency? {{ form.inspection_contingency }}<br>
+        <div id="remove_contingency">How many days after acceptance for the buyer to remove inspection contingency? {{ form.remove_inspection_contingency }}<br></div>
+        How many days after acceptance the buyer shall have access to the property? {{ form.property_access }}<br>
+        Days to perform {{ form.days_perform }}<br>
+        How many days each party shall give the other party while canceling this agreement? {{ form.cancel_agreement }}
+    </div>
+
+    <div class="page">
+        <h3>Verification Details</h3>
+        When to make final verification of condition?<br>
+        {{ form.final_verification }}
+    </div>
+
+    <div class="page">
+        <h3>Expiration of Offer Details</h3>
+        Expiration date: {{ form.expiration_date }}<br>
+        Expiration time: {{ form.expiration_time }}
+    </div>
+
+    <button type="button" id="previous_button" onclick="nextPrev(-1)">Previous</button>
+    <button type="button" id="next_button" onclick="nextPrev(1)">Next</button>
+</form>
+<script src="{% static 'scripts/scripts.js' %}"></script>
+<script>
+    // Buyer Possession
+    document.getElementById("buyer_possession_1").addEventListener("click", click_buyer_possession_1);
+    document.getElementById("buyer_possession_2").addEventListener("click", click_buyer_possession_2);
+    document.getElementById("buyer_possession_3").addEventListener("click", click_buyer_possession_3);
+
+    function click_buyer_possession_1() {
+        document.getElementById("buyer_possession_1_content").style.display = "inline"
+        document.getElementById("buyer_possession_2_content").style.display = "none"
+        document.getElementById("buyer_possession_3_content").style.display = "none";
+    }
+
+    function click_buyer_possession_2() {
+        document.getElementById("buyer_possession_1_content").style.display = "none"
+        document.getElementById("buyer_possession_2_content").style.display = "inline"
+        document.getElementById("buyer_possession_3_content").style.display = "none";
+    }
+
+    function click_buyer_possession_3() {
+        document.getElementById("buyer_possession_1_content").style.display = "none"
+        document.getElementById("buyer_possession_2_content").style.display = "none"
+        document.getElementById("buyer_possession_3_content").style.display = "inline";
+    }
+
+    // Property Vacancy
+    document.getElementById("option_1").addEventListener("click", click_option_1);
+    document.getElementById("option_2").addEventListener("click", click_option_2);
+
+    function click_option_1() {
+        document.getElementById("option_1_content").style.display = "inline"
+        document.getElementById("option_2_content").style.display = "none"
+    }
+
+    function click_option_2() {
+        document.getElementById("option_1_content").style.display = "none"
+        document.getElementById("option_2_content").style.display = "inline"
+    }
+
+    // Property access
+    document.getElementById("id_inspection_contingency").addEventListener("click", click_inspection_contingency);
+
+    function click_inspection_contingency() {
+        if (document.getElementById("id_inspection_contingency").checked) {
+            document.getElementById("remove_contingency").style.display = "inline";
+        }
+        else {
+            document.getElementById("remove_contingency").style.display = "none";
+        }
+    }
+</script>
+{% endblock %}

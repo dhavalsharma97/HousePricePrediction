@@ -10,5 +10,8 @@ urlpatterns = [
     path('offerform2/', views.offer_form_2, name='offerform2'),
     path('offerformconfirm2/', views.offer_form_confirm_2, name='offerformconfirm2'),
     path('offerform3/', views.offer_form_3, name='offerform3'),
-    path('offerformconfirm3/', views.offer_form_confirm_3, name='offerformconfirm3')
+    path('offerformconfirm3/', views.offer_form_confirm_3, name='offerformconfirm3'),
+    path('offerform4/', views.offer_form_4, name='offerform4'),
+    path('offerformconfirm4/', views.offer_form_confirm_4, name='offerformconfirm4'),
+    path('offerformnavigate/', views.offer_form_navigate, name='offerformnavigate')
 ]

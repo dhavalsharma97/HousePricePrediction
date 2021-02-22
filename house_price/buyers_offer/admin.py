@@ -41,6 +41,24 @@ class BuyersOfferAdmin(admin.ModelAdmin):
         }),
         ('Cost Allocation Details', {
             'fields': ('natural_hazard', 'tax_report', 'environmental_report', 'insurance_claim_report', 'termite_inspection_report', 'smoke_alarm', 'government_inspection', 'government_retrofit', 'escrow_fee', 'escrow_holder', 'escrow_general_provision', 'title_insurance', 'title_policy', 'county_transfer', 'city_transfer', 'hoa_transfer', 'hoa_document', 'private_transfer', 'section_1_termite', 'tc_fee', 'warranty_waive', 'warranty_plan', 'warranty_maximal_cost', 'upgraded_warranty', 'warranty_company', 'warranty_air_conditioner', 'warranty_pool_spa', 'warranty_buyers_choice')
+        }),
+        ('Item Details', {
+            'fields': ('stove', 'exceptions_1', 'refrigerators', 'exceptions_2', 'dryers_washers', 'exceptions_3', 'additional_items', 'phone_automation_system', 'not_owned_seller')
+        }),
+        ('Closing and Possession Details', {
+            'fields': ('buyer_primary_residence', 'buyer_possession_1', 'buyer_possession_2', 'buyer_possession_3', 'property_vacant_1', 'property_vacant_2')
+        }),
+        ('Statutory and Disclosure Details', {
+            'fields': ['condominium']
+        }),
+        ('Time Period Details', {
+            'fields': ('deliver_report', 'inspection_contingency', 'remove_inspection_contingency', 'property_access', 'days_perform', 'cancel_agreement')
+        }),
+        ('Verification Details', {
+            'fields': ['final_verification']
+        }),
+        ('Expiration of Offer Details', {
+            'fields': ('expiration_date', 'expiration_time')
         })
     )
 

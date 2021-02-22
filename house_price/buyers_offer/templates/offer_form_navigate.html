@@ -1,0 +1,25 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block content %}
+    <h2>Edit Initial Offer</h2>
+
+    <p>
+        You can edit your initial offer here<br>
+        <a href="{% url 'offerform' %}">
+            <button id="navigation_button_1">Step 1</button>
+        </a><br><br>
+        <a href="{% url 'offerform1' %}">
+            <button id="navigation_button_2">Step 2</button>
+        </a><br><br>
+        <a href="{% url 'offerform2' %}">
+            <button id="navigation_button_3">Step 3</button>
+        </a><br><br>
+        <a href="{% url 'offerform3' %}">
+            <button id="navigation_button_4">Step 4</button>
+        </a><br><br>
+        <a href="{% url 'offerform4' %}">
+            <button id="navigation_button_5">Step 5</button>
+        </a>
+    </p>
+{% endblock %}
