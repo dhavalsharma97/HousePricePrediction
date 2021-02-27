@@ -279,6 +279,7 @@ def fill_pdf(application_name, pdf_name, buyer_id):
             data_2['Check Box74'] = '/Yes'
             data_2['including other coverages'] = "Buyer's Choice"
 
+    # Item Details
     if buyers_offer_obj.stove:
         data_2['Check Box76'] = '/Yes'
         data_1['all stoves except'] = buyers_offer_obj.exceptions_1
@@ -297,7 +298,8 @@ def fill_pdf(application_name, pdf_name, buyer_id):
         data_2['Check Box79'] = '/Yes'
 
     data_1['except items and systems identified pursuant to 8B (5)'] = buyers_offer_obj.not_owned_seller
-
+    
+    # Closing and Possession Details
     if not buyers_offer_obj.buyer_primary_residence:
         data_2['Check Box81'] = '/Yes'
 
@@ -316,7 +318,10 @@ def fill_pdf(application_name, pdf_name, buyer_id):
     else:
         data_2['Check Box90'] = '/Yes'
 
+    # Statutory and Disclosure Details
     data_1['condo disclosure days'] = buyers_offer_obj.condominium
+
+    # Time Period Details
     data_1['seller has ______ days'] = buyers_offer_obj.deliver_report
 
     if buyers_offer_obj.inspection_contingency:
@@ -325,7 +330,11 @@ def fill_pdf(application_name, pdf_name, buyer_id):
 
     data_1['number of days access to property'] = buyers_offer_obj.property_access
     data_1['notice to buyer or seller to perform'] = buyers_offer_obj.days_perform
+    
+    # Verification Details
     data_1['final verification days'] = buyers_offer_obj.final_verification
+    
+    # Expiration of Offer Details
     data_1['expirate offer time'] = buyers_offer_obj.expiration_time
     data_1['expiration offer date 2'] = buyers_offer_obj.expiration_date
     

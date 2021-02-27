@@ -18,6 +18,7 @@ from django.urls import path, include
 from django.views.generic import RedirectView
 from django.conf import settings
 from django.conf.urls.static import static
+from buyers_offer import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,8 +30,14 @@ urlpatterns += [
 
 #Add URL maps to redirect the base URL to our application
 urlpatterns += [
-    path('', RedirectView.as_view(url='buyersoffer/', permanent=True)),
+    path('', RedirectView.as_view(url='buyersoffer/', permanent=True))
 ]
 
 # Use static() to add url mapping to serve static files during development (only)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+#Add Django site authentication urls (for login, logout, password management)
+urlpatterns += [
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/signup', views.signup, name="signup")
+]

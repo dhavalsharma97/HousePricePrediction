@@ -1,5 +1,25 @@
 from django.contrib import admin
-from .models import BuyersOffer
+from .models import CustomUser, BuyersOffer
+from .forms import CustomUserCreationForm
+from django.contrib.auth.admin import UserAdmin
+
+class CustomUserAdmin(UserAdmin):
+    model = CustomUser
+    add_form = CustomUserCreationForm
+
+    fieldsets = (
+        *UserAdmin.fieldsets, 
+        (
+            'User ID',
+            {
+                'fields': [
+                    'primary_key'
+                ]
+            }
+        )
+    )
+
+admin.site.register(CustomUser, CustomUserAdmin)
 
 @admin.register(BuyersOffer)
 class BuyersOfferAdmin(admin.ModelAdmin):
