@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block content %}
+    <h2>Signature Complete</h2>
+
+    <p>
+        You can download the purchase agreement from the email<br>
+        Please make sure that both you and your spouse sign the agreement before proceeding<br>
+        <a href="{% url 'sign_complete' %}">
+            <button>Next</button>
+        </a>
+    </p>
+{% endblock %}

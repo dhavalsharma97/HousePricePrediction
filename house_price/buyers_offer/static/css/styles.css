@@ -88,8 +88,12 @@ input[type=button]:hover, input[type=submit]:hover, button:hover {
     display: none;
 }
 
-#escrow_date, #escrow_days, #buyer_possession_1, #buyer_possession_2, #buyer_possession_3, #option_1, #option_2, #navigation_button_1, #navigation_button_2, #navigation_button_3, #navigation_button_4, #navigation_button_5 {
-	background-color: gray;
+#escrow_date, #escrow_days, #buyer_possession_1, #buyer_possession_2, #buyer_possession_3, #option_1, #option_2, #navigation_button_1, #navigation_button_2, #navigation_button_3, #navigation_button_4, #navigation_button_5, #signature_button_1, #signature_button_2 {
+	background-color: #808080;
+}
+
+#escrow_date:hover, #escrow_days:hover, #buyer_possession_1:hover, #buyer_possession_2:hover, #buyer_possession_3:hover, #option_1:hover, #option_2:hover, #navigation_button_1:hover, #navigation_button_2:hover, #navigation_button_3:hover, #navigation_button_4:hover, #navigation_button_5:hover, #signature_button_1:hover, #signature_button_2:hover {
+	background-color: #888888;
 }
 
 ul {

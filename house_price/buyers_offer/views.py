@@ -1,13 +1,24 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
+import base64
+import docusign_esign
+import requests
+import apiclient
+import os
+from pathlib import Path
+BASE_DIR = Path(__file__).resolve().parent
 
-from helpers.helper import fill_pdf
+from buyers_offer.models import CustomUser, BuyersOffer
 from buyers_offer.forms import CustomUserCreationForm, BuyersOfferForm, BuyersOfferForm1, BuyersOfferForm2, BuyersOfferForm3, BuyersOfferForm4
-from buyers_offer.models import BuyersOffer, CustomUser
+from helpers.helper import fill_pdf
+
+CLIENT_AUTH_ID = 'fe395976-f5fb-4080-b3a5-aff27a877ea4'
+CLIENT_SECRET_KEY = '5209b330-5982-4e92-9942-3c278ff534b1'
+CLIENT_ACCOUNT_ID = '12942871'
 
 def index(request):
     """View function for home page of site"""
@@ -516,3 +527,129 @@ def offer_form_navigate(request):
 
     # Render the HTML template offer_form_navigate.html
     return render(request, 'offer_form_navigate.html')
+
+
+@login_required
+def get_access_code(request):
+    """Helper function for getting the access code for e-signature"""
+
+    base_url = "https://account-d.docusign.com/oauth/auth"
+    auth_url = "{0}?response_type=code&scope=signature&client_id={1}&redirect_uri={2}".format(base_url, CLIENT_AUTH_ID, request.build_absolute_uri(reverse('auth_login')))
+
+    return HttpResponseRedirect(auth_url)
+
+
+@login_required
+def auth_login(request):
+    """Helper function for authenticating the user for e-signature"""
+
+    base_url = "https://account-d.docusign.com/oauth/token"
+    auth_code_string = "{0}:{1}".format(CLIENT_AUTH_ID, CLIENT_SECRET_KEY)
+    auth_token = base64.b64encode(auth_code_string.encode())
+
+    req_headers = {"Authorization": "Basic {0}".format(auth_token.decode('utf-8'))}
+    post_data = {"grant_type": "authorization_code", "code": request.GET.get('code')}
+
+    r = requests.post(base_url, data=post_data, headers=req_headers)
+
+    response = r.json()
+
+    if not 'error' in response:
+        return HttpResponseRedirect("{0}?token={1}".format(reverse('get_signing_url'), response['access_token']))
+
+    return HttpResponse(response['error'])
+
+
+@login_required
+def embedded_signing_ceremony(request):
+    """View function for the e-signature request"""
+
+    user = CustomUser.objects.get(pk=request.user.pk)
+    buyers_offer_obj = BuyersOffer.objects.get(pk=user.primary_key)
+    signer_1_email = buyers_offer_obj.email
+    signer_1_name = buyers_offer_obj.first_name
+    signer_2_email = 'dhaval.sharma97@gmail.com'
+    signer_2_name = 'Dhaval'
+
+    with open(os.path.join(BASE_DIR, 'static/pdf', 'purchase_agreement_filled.pdf'), "rb") as file:
+        content_bytes = file.read()
+
+    base64_file_content = base64.b64encode(content_bytes).decode('ascii')
+
+    document = docusign_esign.Document(
+        document_base64 = base64_file_content,
+        name = 'Buyers Offer Agreement',
+        file_extension = 'pdf',
+        document_id = '1'
+    )
+
+    signer_1 = docusign_esign.Signer(email = signer_1_email, name = signer_1_name, recipient_id = user.primary_key, routing_order = '1', client_user_id = '1')
+    sign_here_tabs_1 = []
+    sign_here_locations_1 = {
+        '1': [('93', '677'), ('5', '5')],
+        '2': [('5', '5')]
+    }
+
+    for page in sign_here_locations_1.keys():
+        for location in range(len(sign_here_locations_1[page])):
+            sign_here = docusign_esign.SignHere(document_id = '1', page_number = page, recipient_id = user.primary_key, tab_label = 'Sign Here', x_position = sign_here_locations_1[page][location][0], y_position = sign_here_locations_1[page][location][1])
+            sign_here_tabs_1.append(sign_here)
+
+    signer_2 = docusign_esign.Signer(email = signer_2_email, name = signer_2_name, recipient_id = '10', routing_order = '1', client_user_id = '1')
+    sign_here_tabs_2 = []
+    sign_here_locations_2 = {
+        '1': [('93', '677')]
+    }
+
+    for page in sign_here_locations_2.keys():
+        for location in range(len(sign_here_locations_2[page])):
+            sign_here = docusign_esign.SignHere(document_id = '1', page_number = page, recipient_id = '10', tab_label = 'Sign Here', x_position = sign_here_locations_2[page][location][0], y_position = sign_here_locations_2[page][location][1])
+            sign_here_tabs_2.append(sign_here)
+
+    signer_1.tabs = docusign_esign.Tabs(sign_here_tabs = sign_here_tabs_1)
+    signer_2.tabs = docusign_esign.Tabs(sign_here_tabs = sign_here_tabs_2)
+
+    envelope_definition = docusign_esign.EnvelopeDefinition(
+        email_subject = "Buyers Offer Agreement",
+        documents = [document],
+        recipients = docusign_esign.Recipients(signers = [signer_1, signer_2]),
+        status = "sent"
+    )
+
+    api_client = docusign_esign.ApiClient()
+    api_client.host = "https://demo.docusign.net/restapi"
+    api_client.set_default_header("Authorization", "Bearer " + request.GET.get('token'))
+
+    envelope_api = docusign_esign.EnvelopesApi(api_client)
+    results = envelope_api.create_envelope(account_id=CLIENT_ACCOUNT_ID, envelope_definition=envelope_definition)
+
+    envelope_id = results.envelope_id
+
+    recipient_view_request_1 = docusign_esign.RecipientViewRequest(
+        authentication_method = "None", client_user_id = '1', recipient_id=user.primary_key, return_url=request.build_absolute_uri(reverse('sign_completed')), user_name=signer_1_name, email=signer_1_email)
+
+    results_1 = envelope_api.create_recipient_view(CLIENT_ACCOUNT_ID, envelope_id, recipient_view_request=recipient_view_request_1)
+
+    recipient_view_request_2 = docusign_esign.RecipientViewRequest(
+        authentication_method = "None", client_user_id = '1', recipient_id='10', return_url=request.build_absolute_uri(reverse('sign_completed')), user_name=signer_2_name, email=signer_2_email)
+
+    results_2 = envelope_api.create_recipient_view(CLIENT_ACCOUNT_ID, envelope_id, recipient_view_request=recipient_view_request_2)
+
+    # Render the HTML template sign_completed.html
+    return render(request, 'sign_here.html', context={'url_1': results_1.url, 'url_2': results_2.url})
+
+
+@login_required
+def sign_completed(request):
+    """View function for the successful e-signature completion"""
+
+    # Render the HTML template sign_completed.html
+    return render(request, 'sign_completed.html')
+
+
+@login_required
+def sign_complete(request):
+    """View function for the successful e-signature completions"""
+
+    # Render the HTML template sign_complete.html
+    return render(request, 'sign_complete.html')
