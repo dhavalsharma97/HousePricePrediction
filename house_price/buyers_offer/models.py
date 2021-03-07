@@ -55,6 +55,9 @@ class BuyersOffer(models.Model):
     last_name = models.CharField(max_length=100, help_text="Enter the last name")
     email = models.EmailField(help_text="Enter the email address")
     phone = models.IntegerField(help_text="Enter the phone number")
+    spouse_first_name = models.CharField(max_length=100, help_text="Enter the spouse first name")
+    spouse_last_name = models.CharField(max_length=100, help_text="Enter the spouse last name")
+    spouse_email = models.EmailField(help_text="Enter the spouse email address")
 
     # Offer Details
     offer_price = models.IntegerField(help_text="Enter the offer price")
@@ -195,6 +198,9 @@ class BuyersOffer(models.Model):
     # Expiration of Offer Details
     expiration_date = models.DateField(null=True, help_text="Enter the expiration date")
     expiration_time = models.CharField(max_length=100, null=True, help_text="Enter the expiration time")
+
+    # Envelope Details
+    envelope_id = models.CharField(max_length=100, null=True, help_text="Enter the envelope ID")
 
     class Meta:
         ordering = ['first_name', 'last_name']

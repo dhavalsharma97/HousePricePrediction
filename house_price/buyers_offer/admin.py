@@ -27,7 +27,7 @@ class BuyersOfferAdmin(admin.ModelAdmin):
     
     fieldsets = (
         ('Personal Details', {
-            'fields': ('first_name', 'last_name', 'email', 'phone')
+            'fields': ('first_name', 'last_name', 'email', 'phone', 'spouse_first_name', 'spouse_last_name', 'spouse_email')
         }),
         ('Offer Details', {
             'fields': ('offer_price', 'payment_type')
@@ -79,6 +79,9 @@ class BuyersOfferAdmin(admin.ModelAdmin):
         }),
         ('Expiration of Offer Details', {
             'fields': ('expiration_date', 'expiration_time')
+        }),
+        ('Envelope Details', {
+            'fields': ['envelope_id']
         })
     )
 

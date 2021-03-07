@@ -57,10 +57,19 @@
 
         <div class="page">
             <h3>Tell us a little about yourself</h3>
-            {{ form.first_name.label }}: {{ form.first_name }}<br><br>
-            {{ form.last_name.label }}: {{ form.last_name }}<br><br>
-            {{ form.email.label }}: {{ form.email }}<br><br>
-            {{ form.phone.label }}: {{ form.phone }}
+            <fieldset>
+                <legend>Your Details</legend>
+                {{ form.first_name.label }}: {{ form.first_name }}<br><br>
+                {{ form.last_name.label }}: {{ form.last_name }}<br><br>
+                {{ form.email.label }}: {{ form.email }}<br><br>
+                {{ form.phone.label }}: {{ form.phone }}
+            </fieldset>
+            <fieldset>
+                <legend>Spouse's Details</legend>
+                {{ form.spouse_first_name.label }}: {{ form.spouse_first_name }}<br><br>
+                {{ form.spouse_last_name.label }}: {{ form.spouse_last_name }}<br><br>
+                {{ form.spouse_email.label }}: {{ form.spouse_email }}
+            </fieldset>
         </div>
 
         <div class="page">

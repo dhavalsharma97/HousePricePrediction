@@ -60,6 +60,9 @@ class BuyersOfferForm(forms.Form):
     last_name = forms.CharField(label="Last Name")
     email = forms.EmailField(label="Email Address")
     phone = forms.IntegerField(label="Phone Number")
+    spouse_first_name = forms.CharField(label="First Name")
+    spouse_last_name = forms.CharField(label="Last Name")
+    spouse_email = forms.EmailField(label="Email Address")
     
     escrow_date = forms.DateField(required=False, label="Escrow Date")
     escrow_days = forms.IntegerField(required=False, label="Escrow Days")

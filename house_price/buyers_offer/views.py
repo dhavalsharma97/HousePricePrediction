@@ -8,6 +8,7 @@ import base64
 import docusign_esign
 import requests
 import apiclient
+import shutil
 import os
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
@@ -61,6 +62,9 @@ def offer_form(request):
                 buyers_offer_obj.last_name=form.cleaned_data['last_name']
                 buyers_offer_obj.email=form.cleaned_data['email']
                 buyers_offer_obj.phone=form.cleaned_data['phone']
+                buyers_offer_obj.spouse_first_name=form.cleaned_data['spouse_first_name']
+                buyers_offer_obj.spouse_last_name=form.cleaned_data['spouse_last_name']
+                buyers_offer_obj.spouse_email=form.cleaned_data['spouse_email']
                 buyers_offer_obj.offer_price=form.cleaned_data['offer_price']
                 buyers_offer_obj.payment_type=form.cleaned_data['payment_type']
                 buyers_offer_obj.apartment=form.cleaned_data['apartment']
@@ -77,6 +81,9 @@ def offer_form(request):
                                             last_name=form.cleaned_data['last_name'],
                                             email=form.cleaned_data['email'],
                                             phone=form.cleaned_data['phone'],
+                                            spouse_first_name=form.cleaned_data['spouse_first_name'],
+                                            spouse_last_name=form.cleaned_data['spouse_last_name'],
+                                            spouse_email=form.cleaned_data['spouse_email'],
                                             offer_price=form.cleaned_data['offer_price'],
                                             payment_type=form.cleaned_data['payment_type'],
                                             apartment=form.cleaned_data['apartment'],
@@ -133,6 +140,9 @@ def offer_form(request):
                 'last_name': buyers_offer_obj.last_name,
                 'email': buyers_offer_obj.email,
                 'phone': buyers_offer_obj.phone,
+                'spouse_first_name': buyers_offer_obj.spouse_first_name,
+                'spouse_last_name': buyers_offer_obj.spouse_last_name,
+                'spouse_email': buyers_offer_obj.spouse_email,
                 'offer_price': buyers_offer_obj.offer_price,
                 'payment_type': buyers_offer_obj.payment_type,
                 'apartment': buyers_offer_obj.apartment,
@@ -568,8 +578,8 @@ def embedded_signing_ceremony(request):
     buyers_offer_obj = BuyersOffer.objects.get(pk=user.primary_key)
     signer_1_email = buyers_offer_obj.email
     signer_1_name = buyers_offer_obj.first_name
-    signer_2_email = 'dhaval.sharma97@gmail.com'
-    signer_2_name = 'Dhaval'
+    signer_2_email = buyers_offer_obj.spouse_email
+    signer_2_name = buyers_offer_obj.spouse_first_name
 
     with open(os.path.join(BASE_DIR, 'static/pdf', 'purchase_agreement_filled.pdf'), "rb") as file:
         content_bytes = file.read()
@@ -583,27 +593,42 @@ def embedded_signing_ceremony(request):
         document_id = '1'
     )
 
-    signer_1 = docusign_esign.Signer(email = signer_1_email, name = signer_1_name, recipient_id = user.primary_key, routing_order = '1', client_user_id = '1')
+    signer_1 = docusign_esign.Signer(email = signer_1_email, name = signer_1_name, recipient_id = str(user.primary_key) + '00', routing_order = '1', client_user_id = '1')
     sign_here_tabs_1 = []
     sign_here_locations_1 = {
-        '1': [('93', '677'), ('5', '5')],
-        '2': [('5', '5')]
+        '1': [('93', '677')],
+        '2': [('93', '689')],
+        '3': [('93', '695')],
+        '4': [('93', '703')],
+        '5': [('93', '699')],
+        '6': [('93', '702')],
+        '7': [('93', '704')],
+        '8': [('93', '699')],
+        '13': [('305', '327')]
     }
 
     for page in sign_here_locations_1.keys():
         for location in range(len(sign_here_locations_1[page])):
-            sign_here = docusign_esign.SignHere(document_id = '1', page_number = page, recipient_id = user.primary_key, tab_label = 'Sign Here', x_position = sign_here_locations_1[page][location][0], y_position = sign_here_locations_1[page][location][1])
+            sign_here = docusign_esign.SignHere(document_id = '1', page_number = page, recipient_id = str(user.primary_key) + '00', tab_label = 'Sign Here', x_position = sign_here_locations_1[page][location][0], y_position = sign_here_locations_1[page][location][1])
             sign_here_tabs_1.append(sign_here)
 
-    signer_2 = docusign_esign.Signer(email = signer_2_email, name = signer_2_name, recipient_id = '10', routing_order = '1', client_user_id = '1')
+    signer_2 = docusign_esign.Signer(email = signer_2_email, name = signer_2_name, recipient_id = str(user.primary_key) + '01', routing_order = '1', client_user_id = '1')
     sign_here_tabs_2 = []
     sign_here_locations_2 = {
-        '1': [('93', '677')]
+        '1': [('152', '677')],
+        '2': [('152', '689')],
+        '3': [('152', '695')],
+        '4': [('152', '703')],
+        '5': [('152', '699')],
+        '6': [('152', '702')],
+        '7': [('152', '704')],
+        '8': [('152', '699')],
+        '13': [('305', '397')]
     }
 
     for page in sign_here_locations_2.keys():
         for location in range(len(sign_here_locations_2[page])):
-            sign_here = docusign_esign.SignHere(document_id = '1', page_number = page, recipient_id = '10', tab_label = 'Sign Here', x_position = sign_here_locations_2[page][location][0], y_position = sign_here_locations_2[page][location][1])
+            sign_here = docusign_esign.SignHere(document_id = '1', page_number = page, recipient_id = str(user.primary_key) + '01', tab_label = 'Sign Here', x_position = sign_here_locations_2[page][location][0], y_position = sign_here_locations_2[page][location][1])
             sign_here_tabs_2.append(sign_here)
 
     signer_1.tabs = docusign_esign.Tabs(sign_here_tabs = sign_here_tabs_1)
@@ -625,15 +650,26 @@ def embedded_signing_ceremony(request):
 
     envelope_id = results.envelope_id
 
-    recipient_view_request_1 = docusign_esign.RecipientViewRequest(
-        authentication_method = "None", client_user_id = '1', recipient_id=user.primary_key, return_url=request.build_absolute_uri(reverse('sign_completed')), user_name=signer_1_name, email=signer_1_email)
+    if(buyers_offer_obj.envelope_id):
+        r = requests.get(url="https://demo.docusign.net/restapi/v2.1/accounts/{0}/envelopes/{1}".format(CLIENT_ACCOUNT_ID, buyers_offer_obj.envelope_id), headers={'Authorization':"Bearer " + request.GET.get('token')})
+        envelope_info = r.json()
+        if envelope_info['status'] == "completed":
+            document = envelope_api.get_document(CLIENT_ACCOUNT_ID, '1', buyers_offer_obj.envelope_id)
+            shutil.move(document, 'buyers_offer/static/pdf/purchase_agreement_signed.pdf')
+            return HttpResponseRedirect(reverse('sign_complete'))
+    else:
+        buyers_offer_obj.envelope_id = envelope_id
+        buyers_offer_obj.save()
 
-    results_1 = envelope_api.create_recipient_view(CLIENT_ACCOUNT_ID, envelope_id, recipient_view_request=recipient_view_request_1)
+    recipient_view_request_1 = docusign_esign.RecipientViewRequest(
+        authentication_method = "None", client_user_id = '1', recipient_id = str(user.primary_key) + '00', return_url = request.build_absolute_uri(reverse('sign_completed')), user_name = signer_1_name, email = signer_1_email)
+
+    results_1 = envelope_api.create_recipient_view(CLIENT_ACCOUNT_ID, buyers_offer_obj.envelope_id, recipient_view_request = recipient_view_request_1)
 
     recipient_view_request_2 = docusign_esign.RecipientViewRequest(
-        authentication_method = "None", client_user_id = '1', recipient_id='10', return_url=request.build_absolute_uri(reverse('sign_completed')), user_name=signer_2_name, email=signer_2_email)
+        authentication_method = "None", client_user_id = '1', recipient_id = str(user.primary_key) + '01', return_url = request.build_absolute_uri(reverse('sign_completed')), user_name = signer_2_name, email = signer_2_email)
 
-    results_2 = envelope_api.create_recipient_view(CLIENT_ACCOUNT_ID, envelope_id, recipient_view_request=recipient_view_request_2)
+    results_2 = envelope_api.create_recipient_view(CLIENT_ACCOUNT_ID, buyers_offer_obj.envelope_id, recipient_view_request = recipient_view_request_2)
 
     # Render the HTML template sign_completed.html
     return render(request, 'sign_here.html', context={'url_1': results_1.url, 'url_2': results_2.url})
