@@ -349,5 +349,5 @@ def fill_pdf(application_name, pdf_name, buyer_id):
         tick_buttons(page, data_2)
         writer.addPage(page)
 
-    with open(application_name + '/static/pdf/' + pdf_name + '_filled.pdf',"wb") as pdf:
+    with open(application_name + '/static/pdf/' + pdf_name + '_filled_' + str(buyer_id) + '.pdf',"wb") as pdf:
         writer.write(pdf)

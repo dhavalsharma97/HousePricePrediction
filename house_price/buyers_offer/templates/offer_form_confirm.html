@@ -7,11 +7,14 @@
 
     <p>
         Download the purchase agreement for your reference and move to next steps<br>
-        <a href="{% static 'pdf/purchase_agreement_filled.pdf' %}" download>
+        <a href="{% static pdf_path %}" download>
             <button>Download</button>
-        </a>
+        </a><br><br>
         <a href="{% url 'offerform1' %}">
             <button>Next</button>
+        </a>
+        <a href="{% url 'offerformnavigate' %}">
+            <button>Navigate</button>
         </a>
     </p>
 {% endblock %}

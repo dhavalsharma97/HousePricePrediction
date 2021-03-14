@@ -17,9 +17,9 @@ from buyers_offer.models import CustomUser, BuyersOffer
 from buyers_offer.forms import CustomUserCreationForm, BuyersOfferForm, BuyersOfferForm1, BuyersOfferForm2, BuyersOfferForm3, BuyersOfferForm4
 from helpers.helper import fill_pdf
 
-CLIENT_AUTH_ID = 'fe395976-f5fb-4080-b3a5-aff27a877ea4'
-CLIENT_SECRET_KEY = '5209b330-5982-4e92-9942-3c278ff534b1'
-CLIENT_ACCOUNT_ID = '12942871'
+CLIENT_AUTH_ID = '6dfb62a5-2b74-4358-81de-327243a9fe60'
+CLIENT_SECRET_KEY = '75c8da9b-d4f0-4c06-a15c-2ab6815edf6b'
+CLIENT_ACCOUNT_ID = '13197074'
 
 def index(request):
     """View function for home page of site"""
@@ -190,8 +190,10 @@ def offer_form(request):
 def offer_form_confirm(request):
     """View function for buyers offer confirmation page of site"""
 
+    user = CustomUser.objects.get(pk=request.user.pk)
+
     # Render the HTML template offer_form_confirm.html
-    return render(request, 'offer_form_confirm.html')
+    return render(request, 'offer_form_confirm.html', {'pdf_path': 'pdf/purchase_agreement_filled_' + str(user.primary_key) +'.pdf'})
 
 
 @login_required
@@ -264,8 +266,10 @@ def offer_form_1(request):
 def offer_form_confirm_1(request):
     """View function for buyers offer confirmation page of site"""
 
+    user = CustomUser.objects.get(pk=request.user.pk)
+
     # Render the HTML template offer_form_confirm_1.html
-    return render(request, 'offer_form_confirm_1.html')
+    return render(request, 'offer_form_confirm_1.html', {'pdf_path': 'pdf/purchase_agreement_filled_' + str(user.primary_key) +'.pdf'})
 
 
 @login_required
@@ -327,8 +331,10 @@ def offer_form_2(request):
 def offer_form_confirm_2(request):
     """View function for buyers offer confirmation page of site"""
 
+    user = CustomUser.objects.get(pk=request.user.pk)
+
     # Render the HTML template offer_form_confirm_2.html
-    return render(request, 'offer_form_confirm_2.html')
+    return render(request, 'offer_form_confirm_2.html', {'pdf_path': 'pdf/purchase_agreement_filled_' + str(user.primary_key) +'.pdf'})
 
 
 @login_required
@@ -430,8 +436,10 @@ def offer_form_3(request):
 def offer_form_confirm_3(request):
     """View function for buyers offer confirmation page of site"""
 
+    user = CustomUser.objects.get(pk=request.user.pk)
+
     # Render the HTML template offer_form_confirm_3.html
-    return render(request, 'offer_form_confirm_3.html')
+    return render(request, 'offer_form_confirm_3.html', {'pdf_path': 'pdf/purchase_agreement_filled_' + str(user.primary_key) +'.pdf'})
 
 
 @login_required
@@ -527,8 +535,10 @@ def offer_form_4(request):
 def offer_form_confirm_4(request):
     """View function for buyers offer confirmation page of site"""
 
+    user = CustomUser.objects.get(pk=request.user.pk)
+
     # Render the HTML template offer_form_confirm_4.html
-    return render(request, 'offer_form_confirm_4.html')
+    return render(request, 'offer_form_confirm_4.html', {'pdf_path': 'pdf/purchase_agreement_filled_' + str(user.primary_key) +'.pdf'})
 
 
 @login_required
@@ -581,7 +591,7 @@ def embedded_signing_ceremony(request):
     signer_2_email = buyers_offer_obj.spouse_email
     signer_2_name = buyers_offer_obj.spouse_first_name
 
-    with open(os.path.join(BASE_DIR, 'static/pdf', 'purchase_agreement_filled.pdf'), "rb") as file:
+    with open(os.path.join(BASE_DIR, 'static/pdf', 'purchase_agreement_filled_' + user.primary_key + '.pdf'), "rb") as file:
         content_bytes = file.read()
 
     base64_file_content = base64.b64encode(content_bytes).decode('ascii')
@@ -612,6 +622,16 @@ def embedded_signing_ceremony(request):
             sign_here = docusign_esign.SignHere(document_id = '1', page_number = page, recipient_id = str(user.primary_key) + '00', tab_label = 'Sign Here', x_position = sign_here_locations_1[page][location][0], y_position = sign_here_locations_1[page][location][1])
             sign_here_tabs_1.append(sign_here)
 
+    date_signed_tabs_1 = []
+    date_signed_locations_1 = {
+        '13': [('380', '350')]
+    }
+
+    for page in date_signed_locations_1.keys():
+        for location in range(len(date_signed_locations_1[page])):
+            date_signed = docusign_esign.DateSigned(document_id = '1', page_number = page, recipient_id = str(user.primary_key) + '00', x_position = date_signed_locations_1[page][location][0], y_position = date_signed_locations_1[page][location][1])
+            date_signed_tabs_1.append(date_signed)
+
     signer_2 = docusign_esign.Signer(email = signer_2_email, name = signer_2_name, recipient_id = str(user.primary_key) + '01', routing_order = '1', client_user_id = '1')
     sign_here_tabs_2 = []
     sign_here_locations_2 = {
@@ -631,8 +651,18 @@ def embedded_signing_ceremony(request):
             sign_here = docusign_esign.SignHere(document_id = '1', page_number = page, recipient_id = str(user.primary_key) + '01', tab_label = 'Sign Here', x_position = sign_here_locations_2[page][location][0], y_position = sign_here_locations_2[page][location][1])
             sign_here_tabs_2.append(sign_here)
 
-    signer_1.tabs = docusign_esign.Tabs(sign_here_tabs = sign_here_tabs_1)
-    signer_2.tabs = docusign_esign.Tabs(sign_here_tabs = sign_here_tabs_2)
+    date_signed_tabs_2 = []
+    date_signed_locations_2 = {
+        '13': [('380', '420')]
+    }
+
+    for page in date_signed_locations_2.keys():
+        for location in range(len(date_signed_locations_2[page])):
+            date_signed = docusign_esign.DateSigned(document_id = '1', page_number = page, recipient_id = str(user.primary_key) + '01', x_position = date_signed_locations_2[page][location][0], y_position = date_signed_locations_2[page][location][1])
+            date_signed_tabs_2.append(date_signed)
+
+    signer_1.tabs = docusign_esign.Tabs(sign_here_tabs = sign_here_tabs_1, date_signed_tabs = date_signed_tabs_1)
+    signer_2.tabs = docusign_esign.Tabs(sign_here_tabs = sign_here_tabs_2, date_signed_tabs = date_signed_tabs_2)
 
     envelope_definition = docusign_esign.EnvelopeDefinition(
         email_subject = "Buyers Offer Agreement",
@@ -655,7 +685,7 @@ def embedded_signing_ceremony(request):
         envelope_info = r.json()
         if envelope_info['status'] == "completed":
             document = envelope_api.get_document(CLIENT_ACCOUNT_ID, '1', buyers_offer_obj.envelope_id)
-            shutil.move(document, 'buyers_offer/static/pdf/purchase_agreement_signed.pdf')
+            shutil.move(document, 'buyers_offer/static/pdf/purchase_agreement_signed_' + user.primary_key + '.pdf')
             return HttpResponseRedirect(reverse('sign_complete'))
     else:
         buyers_offer_obj.envelope_id = envelope_id
@@ -687,5 +717,7 @@ def sign_completed(request):
 def sign_complete(request):
     """View function for the successful e-signature completions"""
 
+    user = CustomUser.objects.get(pk=request.user.pk)
+
     # Render the HTML template sign_complete.html
-    return render(request, 'sign_complete.html')
+    return render(request, 'sign_complete.html', {'pdf_path': 'pdf/purchase_agreement_signed_' + str(user.primary_key) +'.pdf'})

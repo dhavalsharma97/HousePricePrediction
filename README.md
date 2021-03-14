@@ -8,6 +8,7 @@
  * Type "py manage.py runserver"
  * Go to http://127.0.0.1:8000/ on your browser
  * Admin Page - http://127.0.0.1:8000/admin [Username - admin, Password - admin]
+ * Docusign Account - [Username - ai.house.trade@gmail.com, Password - Housetrade@123]
 
 ## Project Details
  The home page is redirected to the BuyersOffer page. This project also features an admin page for managing the database.
