@@ -17,9 +17,11 @@ from buyers_offer.models import CustomUser, BuyersOffer
 from buyers_offer.forms import CustomUserCreationForm, BuyersOfferForm, BuyersOfferForm1, BuyersOfferForm2, BuyersOfferForm3, BuyersOfferForm4
 from helpers.helper import fill_pdf
 
+
 CLIENT_AUTH_ID = '6dfb62a5-2b74-4358-81de-327243a9fe60'
 CLIENT_SECRET_KEY = '75c8da9b-d4f0-4c06-a15c-2ab6815edf6b'
 CLIENT_ACCOUNT_ID = '13197074'
+
 
 def index(request):
     """View function for home page of site"""

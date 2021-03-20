@@ -1,0 +1,136 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block content %}
+    <form action="" method="POST" id="form" class="buyers_offer_form">
+        {% csrf_token %}
+        <h2>Seller's Counter Offer</h2>
+        <div class="page">
+            <h3>Term Details</h3>
+            Signed Date of the contract: {{ form.contract_sign_date }}<br>
+            Do you have multiple offers? {{ form.multiple_offers }}<br><br>
+            To which contract is this a counter offer to? {{ form.contract_offer }}
+            <span id="counter_offer">Counter Offer Number: {{ form.counter_offer }}<br></span>
+            Property Address: {{ form.property_address }}<br>
+            Buyer's Name: {{ form.buyers_name }}<br>
+            Seller's Name: {{ form.sellers_name }}
+        </div>
+
+        <div class="page">
+            <h3>Term Details</h3>
+            Would you like to change the offer price? {{ form.offer_price_change }}<br><br>
+            What's the new price? {{ form.new_offer_price }}
+            Would you like to change the escrow company? {{ form.escrow_company_change }}<br>
+            What's the name of the escrow company? {{ form.escrow_company_name }}<br>
+            Would you like to change the title company? {{ form.title_company_change }}<br>
+            What's the name of new title company? {{ form.title_company_name }}<br>
+            Would you like to change the termite company? {{ form.termite_company_change }}<br>
+            What's the name of new termite company? {{ form.termite_company_name }}<br>
+            Do you have other terms? {{ form.other_terms }}<br>
+            What's your additional terms? {{ form.other_terms_text }}
+        </div>
+
+        <div class="page">
+            <h3>Term Details</h3>
+            Would you like to remove appraisal contingence? {{ form.remove_appraisal_contingence }}<br>
+            <span id="remove_appraisal_contingence"><strong>The sale of this property is not contingent upon appraisal</strong><br><br></span>
+            Would you like to remove inspection contingency? {{ form.remove_inspection_contingence }}<br>
+            <span id="remove_inspection_contingence"><strong>The property is sold as is</strong><br><br></span>
+            Would you like the buyer to provide loan qualification proofs? {{ form.loan_qualification_proofs }}<br>
+            <span id="loan_qualification_proofs"><strong>Buyers to provide the loan-qualification proofs issued by lenders</strong><br><br></span>
+            Is there an addenda? {{ form.addenda }}<br><br>
+            What are the addenda's names?<br>
+            <button type="button" id="addenda_name_1">Addenda's Number</button><br>
+            {{ form.addenda_name_1 }}<br>
+            <button type="button" id="addenda_name_2">Text</button><br>
+            {{ form.addenda_name_2 }}<br>
+            <button type="button" id="addenda_name_3">Text</button><br>
+            {{ form.addenda_name_3 }}<br>
+        </div>
+
+        <div class="page">
+            <h3>Expiration Details</h3>
+            Expiration Time: {{ form.expiration_time }}<br>
+            AM or PM {{ form.expiration_meridian }}<br>
+            Expiration Date: {{ form.expiration_date }}
+        </div>
+
+        <button type="button" id="previous_button" onclick="nextPrev(-1)">Previous</button>
+        <button type="button" id="next_button" onclick="nextPrev(1)">Next</button>
+    </form>
+
+    <script src="{% static 'scripts/scripts.js' %}"></script>
+    <script>
+        // Counter Offer Number
+        document.getElementById("id_contract_offer_0").addEventListener("click", hide_counter_offer);
+        document.getElementById("id_contract_offer_1").addEventListener("click", show_counter_offer);
+        document.getElementById("id_contract_offer_2").addEventListener("click", hide_counter_offer);
+
+        function hide_counter_offer() {
+            document.getElementById("counter_offer").style.display = "none";
+        }
+
+        function show_counter_offer() {
+            document.getElementById("counter_offer").style.display = "inline";
+        }
+
+        // Remove Appraisal Contingence
+        document.getElementById("id_remove_appraisal_contingence").addEventListener("click", remove_appraisal_contingence);
+        
+        function remove_appraisal_contingence() {
+            if (document.getElementById("id_remove_appraisal_contingence").checked) {
+                document.getElementById("remove_appraisal_contingence").style.display = "inline";
+            }
+            else {
+                document.getElementById("remove_appraisal_contingence").style.display = "none";
+            }
+        }
+
+        // Remove Inspection Contingence
+        document.getElementById("id_remove_inspection_contingence").addEventListener("click", remove_inspection_contingence);
+        
+        function remove_inspection_contingence() {
+            if (document.getElementById("id_remove_inspection_contingence").checked) {
+                document.getElementById("remove_inspection_contingence").style.display = "inline";
+            }
+            else {
+                document.getElementById("remove_inspection_contingence").style.display = "none";
+            }
+        }
+
+        // Loan Qualification Proofs
+        document.getElementById("id_loan_qualification_proofs").addEventListener("click", loan_qualification_proofs);
+        
+        function loan_qualification_proofs() {
+            if (document.getElementById("id_loan_qualification_proofs").checked) {
+                document.getElementById("loan_qualification_proofs").style.display = "inline";
+            }
+            else {
+                document.getElementById("loan_qualification_proofs").style.display = "none";
+            }
+        }
+
+        // Addenda Names
+        document.getElementById("addenda_name_1").addEventListener("click", show_addenda_name_1);
+        document.getElementById("addenda_name_2").addEventListener("click", show_addenda_name_2);
+        document.getElementById("addenda_name_3").addEventListener("click", show_addenda_name_3);
+
+        function show_addenda_name_1() {
+            document.getElementById("id_addenda_name_1").style.display = "inline";
+            document.getElementById("id_addenda_name_2").style.display = "none";
+            document.getElementById("id_addenda_name_3").style.display = "none";
+        }
+
+        function show_addenda_name_2() {
+            document.getElementById("id_addenda_name_1").style.display = "none";
+            document.getElementById("id_addenda_name_2").style.display = "inline";
+            document.getElementById("id_addenda_name_3").style.display = "none";
+        }
+
+        function show_addenda_name_3() {
+            document.getElementById("id_addenda_name_1").style.display = "none";
+            document.getElementById("id_addenda_name_2").style.display = "none";
+            document.getElementById("id_addenda_name_3").style.display = "inline";
+        }
+    </script>
+{% endblock %}

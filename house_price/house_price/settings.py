@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'buyers_offer.apps.BuyersOfferConfig'
+    'buyers_offer.apps.BuyersOfferConfig',
+    'sellers_counter_offer.apps.SellersCounterOfferConfig'
 ]
 
 MIDDLEWARE = [

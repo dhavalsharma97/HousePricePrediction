@@ -84,15 +84,15 @@ input[type=button]:hover, input[type=submit]:hover, button:hover {
 	margin-right: auto;
 }
 
-.page, #cash_offer, #loan_offer, #id_escrow_date, #id_escrow_days, #buyer_agent, #seller_agent, #fund_verification_other, #id_fund_verification_other, #second_loan, #first_loan_type_other, #id_first_loan_type_other, #second_loan_type_other, #id_second_loan_type_other, #id_deposit_payment_type_other, #deposit_payment, #id_deposit_due_other, #deposit_due, #appraisal_contingency, #id_appraisal_contingency_days, #loan_contingency, #id_loan_contingency_days, #natural_hazard, #buyer_possession_1_content, #buyer_possession_2_content, #buyer_possession_3_content, #option_1_content, #option_2_content, #remove_contingency {
+.page, #cash_offer, #loan_offer, #id_escrow_date, #id_escrow_days, #buyer_agent, #seller_agent, #fund_verification_other, #id_fund_verification_other, #second_loan, #first_loan_type_other, #id_first_loan_type_other, #second_loan_type_other, #id_second_loan_type_other, #id_deposit_payment_type_other, #deposit_payment, #id_deposit_due_other, #deposit_due, #appraisal_contingency, #id_appraisal_contingency_days, #loan_contingency, #id_loan_contingency_days, #natural_hazard, #buyer_possession_1_content, #buyer_possession_2_content, #buyer_possession_3_content, #option_1_content, #option_2_content, #remove_contingency, #counter_offer, #remove_appraisal_contingence, #remove_inspection_contingence, #loan_qualification_proofs, #id_addenda_name_1, #id_addenda_name_2, #id_addenda_name_3 {
     display: none;
 }
 
-#escrow_date, #escrow_days, #buyer_possession_1, #buyer_possession_2, #buyer_possession_3, #option_1, #option_2, #navigation_button_1, #navigation_button_2, #navigation_button_3, #navigation_button_4, #navigation_button_5, #signature_button_1, #signature_button_2 {
+#escrow_date, #escrow_days, #buyer_possession_1, #buyer_possession_2, #buyer_possession_3, #option_1, #option_2, #navigation_button_1, #navigation_button_2, #navigation_button_3, #navigation_button_4, #navigation_button_5, #signature_button_1, #signature_button_2, #addenda_name_1, #addenda_name_2, #addenda_name_3 {
 	background-color: #808080;
 }
 
-#escrow_date:hover, #escrow_days:hover, #buyer_possession_1:hover, #buyer_possession_2:hover, #buyer_possession_3:hover, #option_1:hover, #option_2:hover, #navigation_button_1:hover, #navigation_button_2:hover, #navigation_button_3:hover, #navigation_button_4:hover, #navigation_button_5:hover, #signature_button_1:hover, #signature_button_2:hover {
+#escrow_date:hover, #escrow_days:hover, #buyer_possession_1:hover, #buyer_possession_2:hover, #buyer_possession_3:hover, #option_1:hover, #option_2:hover, #navigation_button_1:hover, #navigation_button_2:hover, #navigation_button_3:hover, #navigation_button_4:hover, #navigation_button_5:hover, #signature_button_1:hover, #signature_button_2:hover, #addenda_name_1:hover, #addenda_name_2:hover, #addenda_name_3:hover {
 	background-color: #888888;
 }
 
