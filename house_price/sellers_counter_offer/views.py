@@ -21,7 +21,7 @@ def get_access_code(request):
     """Helper function for getting the access code for e-signature"""
 
     base_url = "https://account-d.docusign.com/oauth/auth"
-    auth_url = "{0}?response_type=code&scope=signature&client_id={1}&redirect_uri={2}".format(base_url, CLIENT_AUTH_ID, request.build_absolute_uri(reverse('auth_login')))
+    auth_url = "{0}?response_type=code&scope=signature&client_id={1}&redirect_uri={2}".format(base_url, CLIENT_AUTH_ID, request.build_absolute_uri(reverse('authlogin')))
 
     return HttpResponseRedirect(auth_url)
 
@@ -53,32 +53,34 @@ def sellers_counter_form(request):
     user = CustomUser.objects.get(pk=request.user.pk)
 
     if request.method == 'POST':
-        purchase_agreement = request.FILES['purchase_agreement']
-        with open('sellers_counter_offer/static/pdf/purchase_agreement_upload_'+ user.primary_key + '.pdf', 'wb+') as destination:
-            for chunk in purchase_agreement.chunks():
-                destination.write(chunk)
-
-        purchase_agreement_text = extract_text('sellers_counter_offer/static/pdf/purchase_agreement_upload_' + user.primary_key + '.pdf')
-        envelope_id_location = re.search(r'\b(DocuSign Envelope ID: )\b', purchase_agreement_text)
-        
-        if envelope_id_location:
-            envelope_id = purchase_agreement_text[envelope_id_location.end(): envelope_id_location.end() + 36]
-            
-            if SellersCounterOffer.objects.filter(pk=user.primary_key).count() > 0:
-                sellers_counter_offer_obj = SellersCounterOffer.objects.get(pk=user.primary_key)
-            else:
-                # Save the record to database
-                sellers_counter_offer_obj = SellersCounterOffer()
-                sellers_counter_offer_obj.save()
-
-                # Saving the buyer details
-                user.primary_key = sellers_counter_offer_obj.pk
-                user.save()
-            
-            sellers_counter_offer_obj.envelope_id = envelope_id
+        if SellersCounterOffer.objects.filter(pk=user.primary_key).count() > 0:
+            sellers_counter_offer_obj = SellersCounterOffer.objects.get(pk=user.primary_key)
+        else:
+            # Save the record to database
+            sellers_counter_offer_obj = SellersCounterOffer()
             sellers_counter_offer_obj.save()
 
-            return HttpResponseRedirect(reverse('get_access_code'))
+            # Saving the seller details
+            user.primary_key = sellers_counter_offer_obj.pk
+            user.save()
+
+        if request.FILES.get('purchase_agreement'):
+            purchase_agreement = request.FILES['purchase_agreement']
+            with open('sellers_counter_offer/static/pdf/purchase_agreement_upload_'+ user.primary_key + '.pdf', 'wb+') as destination:
+                for chunk in purchase_agreement.chunks():
+                    destination.write(chunk)
+
+            purchase_agreement_text = extract_text('sellers_counter_offer/static/pdf/purchase_agreement_upload_' + user.primary_key + '.pdf')
+            envelope_id_location = re.search(r'\b(DocuSign Envelope ID: )\b', purchase_agreement_text)
+            
+            if envelope_id_location:
+                envelope_id = purchase_agreement_text[envelope_id_location.end(): envelope_id_location.end() + 36]
+                sellers_counter_offer_obj.envelope_id = envelope_id
+                sellers_counter_offer_obj.save()
+
+                return HttpResponseRedirect(reverse('getaccesscode'))
+            else:
+                return HttpResponseRedirect(reverse('sellerscounterformerror'))
         else:
             return HttpResponseRedirect(reverse('sellerscounterformerror'))
     
