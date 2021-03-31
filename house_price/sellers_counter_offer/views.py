@@ -278,11 +278,41 @@ def embedded_signing_ceremony(request):
         document_id = '1'
     )
 
+    if not sellers_counter_offer_obj.multiple_offers:
+        sign_here_locations_1 = {
+            '1': [('78', '456')]
+        }
+
+        date_signed_locations_1 = {
+            '1': [('515', '478')]
+        }
+
+        sign_here_locations_2 = {
+            '1': [('157', '466')]
+        }
+
+        date_signed_locations_2 = {
+            '1': [('515', '488')]
+        }
+    else:
+        sign_here_locations_1 = {
+            '1': [('51', '370')]
+        }
+
+        date_signed_locations_1 = {
+            '1': [('528', '391')]
+        }
+
+        sign_here_locations_2 = {
+            '1': [('130', '382')]
+        }
+
+        date_signed_locations_2 = {
+            '1': [('528', '403')]
+        }
+
     signer_1 = docusign_esign.Signer(email = signer_1_email, name = signer_1_name, recipient_id = str(user.primary_key_1) + '00', routing_order = '1', client_user_id = '1')
     sign_here_tabs_1 = []
-    sign_here_locations_1 = {
-        '1': [('51', '370')]
-    }
 
     for page in sign_here_locations_1.keys():
         for location in range(len(sign_here_locations_1[page])):
@@ -290,9 +320,6 @@ def embedded_signing_ceremony(request):
             sign_here_tabs_1.append(sign_here)
 
     date_signed_tabs_1 = []
-    date_signed_locations_1 = {
-        '1': [('528', '391')]
-    }
 
     for page in date_signed_locations_1.keys():
         for location in range(len(date_signed_locations_1[page])):
@@ -301,9 +328,6 @@ def embedded_signing_ceremony(request):
 
     signer_2 = docusign_esign.Signer(email = signer_2_email, name = signer_2_name, recipient_id = str(user.primary_key_1) + '01', routing_order = '1', client_user_id = '1')
     sign_here_tabs_2 = []
-    sign_here_locations_2 = {
-        '1': [('130', '382')]
-    }
 
     for page in sign_here_locations_2.keys():
         for location in range(len(sign_here_locations_2[page])):
@@ -311,9 +335,6 @@ def embedded_signing_ceremony(request):
             sign_here_tabs_2.append(sign_here)
 
     date_signed_tabs_2 = []
-    date_signed_locations_2 = {
-        '1': [('528', '403')]
-    }
 
     for page in date_signed_locations_2.keys():
         for location in range(len(date_signed_locations_2[page])):
