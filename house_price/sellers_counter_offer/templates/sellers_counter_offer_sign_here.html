@@ -3,7 +3,7 @@
 
 {% block content %}
     <h2>Signature Step</h2>
-    <h3>Please sign the Buyers Offer agreement</h3>
+    <h3>Please sign the Sellers Counter Offer agreement</h3>
     
     <p>
         Signature Links<br>
@@ -16,10 +16,10 @@
     </p>
     <p>
         Please note that the links will expire within 5 minutes of generation<br>
-        <a href="{% url 'get_access_code' %}">
+        <a href="{% url 'sellerscounterofferaccesscode1' %}">
             <button>Refresh</button>
         </a>
-        <a href="{% url 'sign_complete' %}">
+        <a href="{% url 'sellerscounteroffersigncomplete' %}">
             <button>Next</button>
         </a>
     </p>

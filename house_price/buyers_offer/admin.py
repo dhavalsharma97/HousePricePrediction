@@ -13,7 +13,8 @@ class CustomUserAdmin(UserAdmin):
             'User ID',
             {
                 'fields': [
-                    'primary_key'
+                    'primary_key',
+                    'primary_key_1'
                 ]
             }
         )

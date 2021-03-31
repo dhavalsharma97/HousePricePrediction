@@ -11,23 +11,27 @@
             Do you have multiple offers? {{ form.multiple_offers }}<br><br>
             To which contract is this a counter offer to? {{ form.contract_offer }}
             <span id="counter_offer">Counter Offer Number: {{ form.counter_offer }}<br></span>
+            <span id="other_contract_offer">Additional Details: {{ form.other_contract_offer }}<br></span>
             Property Address: {{ form.property_address }}<br>
             Buyer's Name: {{ form.buyers_name }}<br>
-            Seller's Name: {{ form.sellers_name }}
+            Seller's Name: {{ form.sellers_name }}<br>
+            Seller's Email: {{ form.sellers_email }}<br>
+            Seller's Spouse Name: {{ form.sellers_spouse_name }}<br>
+            Seller's Spouse Email: {{ form.sellers_spouse_email }}
         </div>
 
         <div class="page">
             <h3>Term Details</h3>
             Would you like to change the offer price? {{ form.offer_price_change }}<br><br>
-            What's the new price? {{ form.new_offer_price }}
+            <span id="offer_price">What's the new price? {{ form.new_offer_price }}</span>
             Would you like to change the escrow company? {{ form.escrow_company_change }}<br>
-            What's the name of the escrow company? {{ form.escrow_company_name }}<br>
+            <span id="escrow_company">What's the name of the escrow company? {{ form.escrow_company_name }}<br></span>
             Would you like to change the title company? {{ form.title_company_change }}<br>
-            What's the name of new title company? {{ form.title_company_name }}<br>
+            <span id="title_company">What's the name of new title company? {{ form.title_company_name }}<br></span>
             Would you like to change the termite company? {{ form.termite_company_change }}<br>
-            What's the name of new termite company? {{ form.termite_company_name }}<br>
+            <span id="termite_company">What's the name of new termite company? {{ form.termite_company_name }}<br></span>
             Do you have other terms? {{ form.other_terms }}<br>
-            What's your additional terms? {{ form.other_terms_text }}
+            <span id="other_terms">What's your additional terms? {{ form.other_terms_text }}</span>
         </div>
 
         <div class="page">
@@ -39,19 +43,19 @@
             Would you like the buyer to provide loan qualification proofs? {{ form.loan_qualification_proofs }}<br>
             <span id="loan_qualification_proofs"><strong>Buyers to provide the loan-qualification proofs issued by lenders</strong><br><br></span>
             Is there an addenda? {{ form.addenda }}<br><br>
-            What are the addenda's names?<br>
+            <span id="addenda">What are the addenda's names?<br>
             <button type="button" id="addenda_name_1">Addenda's Number</button><br>
             {{ form.addenda_name_1 }}<br>
             <button type="button" id="addenda_name_2">Text</button><br>
             {{ form.addenda_name_2 }}<br>
             <button type="button" id="addenda_name_3">Text</button><br>
-            {{ form.addenda_name_3 }}<br>
+            {{ form.addenda_name_3 }}<br></span>
         </div>
 
         <div class="page">
             <h3>Expiration Details</h3>
             Expiration Time: {{ form.expiration_time }}<br>
-            AM or PM {{ form.expiration_meridian }}<br>
+            AM or PM {{ form.expiration_meridian }}
             Expiration Date: {{ form.expiration_date }}
         </div>
 
@@ -72,6 +76,91 @@
 
         function show_counter_offer() {
             document.getElementById("counter_offer").style.display = "inline";
+        }
+
+        // Other Contract Offer
+        document.getElementById("id_contract_offer_0").addEventListener("click", hide_other_contract_offer);
+        document.getElementById("id_contract_offer_1").addEventListener("click", hide_other_contract_offer);
+        document.getElementById("id_contract_offer_2").addEventListener("click", show_other_contract_offer);
+
+        function hide_other_contract_offer() {
+            document.getElementById("other_contract_offer").style.display = "none";
+        }
+
+        function show_other_contract_offer() {
+            document.getElementById("other_contract_offer").style.display = "inline";
+        }
+
+        // Offer Price
+        document.getElementById("id_offer_price_change").addEventListener("click", hide_offer_price);
+        
+        function hide_offer_price() {
+            if (document.getElementById("id_offer_price_change").checked) {
+                document.getElementById("offer_price").style.display = "inline";
+            }
+            else {
+                document.getElementById("offer_price").style.display = "none";
+            }
+        }
+
+        // Escrow Company
+        document.getElementById("id_escrow_company_change").addEventListener("click", hide_escrow_company);
+        
+        function hide_escrow_company() {
+            if (document.getElementById("id_escrow_company_change").checked) {
+                document.getElementById("escrow_company").style.display = "inline";
+            }
+            else {
+                document.getElementById("escrow_company").style.display = "none";
+            }
+        }
+
+        // Title Company
+        document.getElementById("id_title_company_change").addEventListener("click", hide_title_company);
+        
+        function hide_title_company() {
+            if (document.getElementById("id_title_company_change").checked) {
+                document.getElementById("title_company").style.display = "inline";
+            }
+            else {
+                document.getElementById("title_company").style.display = "none";
+            }
+        }
+
+        // Termite Company
+        document.getElementById("id_termite_company_change").addEventListener("click", hide_termite_company);
+        
+        function hide_termite_company() {
+            if (document.getElementById("id_termite_company_change").checked) {
+                document.getElementById("termite_company").style.display = "inline";
+            }
+            else {
+                document.getElementById("termite_company").style.display = "none";
+            }
+        }
+
+        // Other Terms
+        document.getElementById("id_other_terms").addEventListener("click", hide_other_terms);
+        
+        function hide_other_terms() {
+            if (document.getElementById("id_other_terms").checked) {
+                document.getElementById("other_terms").style.display = "inline";
+            }
+            else {
+                document.getElementById("other_terms").style.display = "none";
+            }
+        }
+
+        // Addenda
+        document.getElementById("id_addenda").addEventListener("click", hide_addenda);
+        
+        function hide_addenda() {
+            if (document.getElementById("id_addenda").checked) {
+                document.getElementById("addenda").style.display = "inline";
+            }
+            else {
+                document.getElementById("addenda").style.display = "none";
+            }
         }
 
         // Remove Appraisal Contingence

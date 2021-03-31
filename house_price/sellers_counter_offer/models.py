@@ -20,13 +20,23 @@ class SellersCounterOffer(models.Model):
         ("PM", "PM")
     )
 
+    # Seller Details
     contract_sign_date = models.DateField(null=True, help_text="Enter the Contract Sign Date")
     multiple_offers = models.BooleanField(null=True, help_text="Does the seller have multiple offers?")
     contract_offer = models.CharField(max_length=50, choices=CONTRACT_TYPES, null=True, help_text="Enter the contract offer for the counter offer")
-    counter_offer = models.CharField(max_length=100, null=True, help_text="Enter the buyers counter offer number")
+    counter_offer = models.IntegerField(null=True, help_text="Enter the buyers counter offer number")
+    other_contract_offer = models.CharField(max_length=100, null=True, help_text="Enter the other contract offer")
     property_address = models.CharField(max_length=100, null=True, help_text="Enter the property address")
     buyers_name = models.CharField(max_length=100, null=True, help_text="Enter the buyer's name")
     sellers_name = models.CharField(max_length=100, null=True, help_text="Enter the seller's name")
+    sellers_spouse_name = models.CharField(max_length=100, null=True, help_text="Enter the seller's spouse's name")
+    sellers_email = models.CharField(max_length=100, null=True, help_text="Enter the seller's email")
+    sellers_spouse_email = models.CharField(max_length=100, null=True, help_text="Enter the seller's spouse's email")
+    envelope_id = models.CharField(max_length=100, null=True, help_text="Enter the Envelope ID")
+    envelope_id_1 = models.CharField(max_length=100, null=True, help_text="Enter the Envelope ID")
+    buyers_id = models.IntegerField(null=True, help_text="Enter the buyer's ID")
+
+    # Offer Details
     offer_price_change = models.BooleanField(null=True, help_text="Does the seller want to change the offer price?")
     new_offer_price = models.CharField(max_length=50, choices=OFFER_PRICE_TYPES, null=True, help_text="Enter the new price")
     escrow_company_change = models.BooleanField(null=True, help_text="Does the seller want to change the escrow company?")
@@ -44,8 +54,8 @@ class SellersCounterOffer(models.Model):
     addenda_name_1 = models.BooleanField(null=True, help_text="Does the seller have any addenda's number?")
     addenda_name_2 = models.CharField(max_length=100, null=True, help_text="Enter the addenda text")
     addenda_name_3 = models.CharField(max_length=100, null=True, help_text="Enter the addenda text")
+
+    # Offer Expiration Details
     expiration_time = models.IntegerField(null=True, help_text="Enter the expiration time")
     expiration_meridian = models.CharField(max_length=50, choices=MERIDIAN_TYPES, null=True, help_text="Enter the expiration meridian")
     expiration_date = models.DateField(null=True, help_text="Enter the expiration date")
-    envelope_id = models.CharField(max_length=100, null=True, help_text="Enter the Envelope ID")
-    buyers_id = models.IntegerField(null=True, help_text="Enter the buyer's ID")

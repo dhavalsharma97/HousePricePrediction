@@ -2,8 +2,12 @@ from PyPDF2 import PdfFileReader, PdfFileWriter
 from PyPDF2.generic import BooleanObject, NameObject, IndirectObject
 from datetime import date
 from num2words import num2words
+import pdfrw
+from reportlab.pdfgen import canvas
 
 from buyers_offer.models import BuyersOffer
+from sellers_counter_offer.models import SellersCounterOffer
+
 
 def set_need_appearances_writer(writer: PdfFileWriter):
     try:
@@ -23,6 +27,7 @@ def set_need_appearances_writer(writer: PdfFileWriter):
         print('set_need_appearances_writer() catch : ', repr(e))
         return writer
 
+
 def tick_buttons(page, fields):
     for j in range(0, len(page['/Annots'])):
         writer_annot = page['/Annots'][j].getObject()
@@ -32,6 +37,7 @@ def tick_buttons(page, fields):
                     NameObject('/V'): NameObject(fields[field]),
                     NameObject('/AS'): NameObject(fields[field])
                 })
+
 
 def fill_pdf(application_name, pdf_name, buyer_id):
     buyers_offer_obj = BuyersOffer.objects.get(pk=buyer_id)
@@ -351,3 +357,150 @@ def fill_pdf(application_name, pdf_name, buyer_id):
 
     with open(application_name + '/static/pdf/' + pdf_name + '_filled_' + str(buyer_id) + '.pdf',"wb") as pdf:
         writer.write(pdf)
+
+
+def create_overlay(application_name, pdf_name, seller_id):
+    """Create the data that will be overlayed on top of the form that we want to fill"""
+    
+    c = canvas.Canvas(application_name + '/static/pdf/sellers_counter_offer_temp.pdf')
+    c.setFont('Helvetica-BoldOblique', 9)
+    c.setFillColor('DarkBlue')
+
+    sellers_counter_offer_obj = SellersCounterOffer.objects.get(pk=seller_id)
+    buyers_offer_obj = BuyersOffer.objects.get(pk=sellers_counter_offer_obj.buyers_id)
+    
+    if not sellers_counter_offer_obj.multiple_offers:
+        # Today's Date
+        c.drawString(480, 708, str(date.today()))
+
+        # Counter Offer Contract Type
+        if sellers_counter_offer_obj.contract_offer == "Purchase Agreement":
+            c.drawString(155, 691, 'X')
+        elif sellers_counter_offer_obj.contract_offer == "Counter Offer":
+            c.drawString(256, 691, 'X')
+            c.drawString(365, 692, str(sellers_counter_offer_obj.counter_offer))
+        else:
+            c.drawString(399, 691, 'X')
+            c.drawString(435, 692, sellers_counter_offer_obj.other_contract_offer)
+
+        # Contract Details
+        c.drawString(65, 681, str(sellers_counter_offer_obj.contract_sign_date))
+        c.drawString(266, 681, sellers_counter_offer_obj.property_address)
+        c.drawString(78, 670, sellers_counter_offer_obj.buyers_name)
+        c.drawString(56, 659, sellers_counter_offer_obj.sellers_name)
+        
+        # Offer Price
+        if sellers_counter_offer_obj.offer_price_change:
+            if sellers_counter_offer_obj.new_offer_price == "Highest And Best Price":
+                c.drawString(147, 587, '1. Price to be highest and best price')
+            else:
+                c.drawString(147, 587, '1. Price to be ' + str(buyers_offer_obj.offer_price))
+        else:
+            c.drawString(147, 587, '1. Price to be ' + str(buyers_offer_obj.offer_price))
+        
+        # Company Details
+        c.drawString(66, 572, '2. Escrow Company to be ' + sellers_counter_offer_obj.escrow_company_name)
+        c.drawString(66, 557, '3. Title Company to be ' + sellers_counter_offer_obj.title_company_name)
+        c.drawString(66, 542, '4. Termite Company to be ' + sellers_counter_offer_obj.termite_company_name)
+        
+        # Other Terms
+        if sellers_counter_offer_obj.other_terms:
+            c.drawString(66, 527, '5. ' + sellers_counter_offer_obj.other_terms_text)
+        
+        # Addenda
+        if sellers_counter_offer_obj.addenda:
+            if sellers_counter_offer_obj.addenda_name_1:
+                c.drawString(412, 449, 'X')
+                c.drawString(488, 449, 'Addenda')
+            elif sellers_counter_offer_obj.addenda_name_2:
+                c.drawString(66, 439, 'X')
+                c.drawString(78, 439, sellers_counter_offer_obj.addenda_name_2)
+            else:
+                c.drawString(319, 439, 'X')
+                c.drawString(331, 439, sellers_counter_offer_obj.addenda_name_3)
+
+        # Expiration Details
+        c.drawString(110, 401, str(sellers_counter_offer_obj.expiration_time))
+
+        if sellers_counter_offer_obj.expiration_meridian == "AM":
+            c.drawString(139, 401, 'X')
+        else:
+            c.drawString(166, 401, 'X')
+
+        c.drawString(205, 401, str(sellers_counter_offer_obj.expiration_date))
+    else:
+        # Counter Offer Number
+        c.drawString(470, 740, '1')
+
+        # Today's Date
+        c.drawString(489, 709, str(date.today()))
+
+        # Counter Offer Contract Type
+        if sellers_counter_offer_obj.contract_offer == "Other":
+            c.drawString(228, 698, 'X')
+            c.drawString(263, 699, 'Other')
+
+        # Contract Details
+        c.drawString(58, 689, str(sellers_counter_offer_obj.contract_sign_date))
+        c.drawString(194, 689, sellers_counter_offer_obj.property_address)
+        c.drawString(74, 679, sellers_counter_offer_obj.buyers_name)
+        c.drawString(56, 670, sellers_counter_offer_obj.sellers_name)
+        
+        # Offer Price
+        if sellers_counter_offer_obj.offer_price_change:
+            if sellers_counter_offer_obj.new_offer_price == "Highest And Best Price":
+                c.drawString(136, 604, '1. Price to be highest and best price')
+            else:
+                c.drawString(136, 604, '1. Price to be ' + str(buyers_offer_obj.offer_price))
+        else:
+            c.drawString(136, 604, '1. Price to be ' + str(buyers_offer_obj.offer_price))
+
+        # Company Details
+        c.drawString(66, 594, '2. Escrow Company to be ' + sellers_counter_offer_obj.escrow_company_name)
+        c.drawString(66, 584, '3. Title Company to be ' + sellers_counter_offer_obj.title_company_name)
+        c.drawString(66, 575, '4. Termite Company to be ' + sellers_counter_offer_obj.termite_company_name)
+
+        # Other Terms
+        if sellers_counter_offer_obj.other_terms:
+            c.drawString(66, 566, '5. ' + sellers_counter_offer_obj.other_terms_text)
+
+        # Addenda
+        if sellers_counter_offer_obj.addenda:
+            if sellers_counter_offer_obj.addenda_name_1:
+                c.drawString(359, 527, 'X')
+                c.drawString(427, 527, 'Addenda')
+            elif sellers_counter_offer_obj.addenda_name_2:    
+                c.drawString(65, 518, 'X')
+                c.drawString(75, 518, sellers_counter_offer_obj.addenda_name_2)
+            else:
+                c.drawString(317, 518, 'X')
+                c.drawString(328, 518, sellers_counter_offer_obj.addenda_name_3)
+        
+        # Expiration Details
+        c.drawString(51, 442, str(sellers_counter_offer_obj.expiration_time))
+
+        if sellers_counter_offer_obj.expiration_meridian == "AM":
+            c.drawString(107, 442, 'X')
+        else:
+            c.drawString(132, 442, 'X')
+
+        c.drawString(170, 442, str(sellers_counter_offer_obj.expiration_date))
+
+    c.save()
+
+
+def fill_pdf_1(application_name, pdf_name, seller_id):
+    """Merge the specified fillable form PDF with the overlay PDF and save the output"""
+
+    create_overlay(application_name, pdf_name, seller_id)
+
+    form = pdfrw.PdfReader(application_name + '/static/pdf/' + pdf_name + '.pdf')
+    olay = pdfrw.PdfReader(application_name + '/static/pdf/sellers_counter_offer_temp.pdf')
+    
+    for form_page, overlay_page in zip(form.pages, olay.pages):
+        merge_obj = pdfrw.PageMerge()
+        overlay = merge_obj.add(overlay_page)[0]
+        pdfrw.PageMerge(form_page).add(overlay).render()
+        
+    writer = pdfrw.PdfWriter()
+    writer.write(application_name + '/static/pdf/sellers_counter_offer_filled_' + seller_id + '.pdf', form)

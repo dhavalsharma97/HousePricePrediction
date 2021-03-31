@@ -556,7 +556,7 @@ def get_access_code(request):
     """Helper function for getting the access code for e-signature"""
 
     base_url = "https://account-d.docusign.com/oauth/auth"
-    auth_url = "{0}?response_type=code&scope=signature&client_id={1}&redirect_uri={2}".format(base_url, CLIENT_AUTH_ID, request.build_absolute_uri(reverse('auth_login')))
+    auth_url = "{0}?response_type=code&scope=signature&client_id={1}&redirect_uri={2}".format(base_url, CLIENT_AUTH_ID, request.build_absolute_uri(reverse('buyersofferauthlogin')))
 
     return HttpResponseRedirect(auth_url)
 
@@ -577,7 +577,7 @@ def auth_login(request):
     response = r.json()
 
     if not 'error' in response:
-        return HttpResponseRedirect("{0}?token={1}".format(reverse('get_signing_url'), response['access_token']))
+        return HttpResponseRedirect("{0}?token={1}".format(reverse('buyersoffersigningurl'), response['access_token']))
 
     return HttpResponse(response['error'])
 
@@ -688,23 +688,23 @@ def embedded_signing_ceremony(request):
         if envelope_info['status'] == "completed":
             document = envelope_api.get_document(CLIENT_ACCOUNT_ID, '1', buyers_offer_obj.envelope_id)
             shutil.move(document, 'buyers_offer/static/pdf/purchase_agreement_signed_' + user.primary_key + '.pdf')
-            return HttpResponseRedirect(reverse('sign_complete'))
+            return HttpResponseRedirect(reverse('offerformsigncomplete'))
     else:
         buyers_offer_obj.envelope_id = envelope_id
         buyers_offer_obj.save()
 
     recipient_view_request_1 = docusign_esign.RecipientViewRequest(
-        authentication_method = "None", client_user_id = '1', recipient_id = str(user.primary_key) + '00', return_url = request.build_absolute_uri(reverse('sign_completed')), user_name = signer_1_name, email = signer_1_email)
+        authentication_method = "None", client_user_id = '1', recipient_id = str(user.primary_key) + '00', return_url = request.build_absolute_uri(reverse('offerformsigncompleted')), user_name = signer_1_name, email = signer_1_email)
 
     results_1 = envelope_api.create_recipient_view(CLIENT_ACCOUNT_ID, buyers_offer_obj.envelope_id, recipient_view_request = recipient_view_request_1)
 
     recipient_view_request_2 = docusign_esign.RecipientViewRequest(
-        authentication_method = "None", client_user_id = '1', recipient_id = str(user.primary_key) + '01', return_url = request.build_absolute_uri(reverse('sign_completed')), user_name = signer_2_name, email = signer_2_email)
+        authentication_method = "None", client_user_id = '1', recipient_id = str(user.primary_key) + '01', return_url = request.build_absolute_uri(reverse('offerformsigncompleted')), user_name = signer_2_name, email = signer_2_email)
 
     results_2 = envelope_api.create_recipient_view(CLIENT_ACCOUNT_ID, buyers_offer_obj.envelope_id, recipient_view_request = recipient_view_request_2)
 
     # Render the HTML template sign_completed.html
-    return render(request, 'sign_here.html', context={'url_1': results_1.url, 'url_2': results_2.url})
+    return render(request, 'offer_form_sign_here.html', context={'url_1': results_1.url, 'url_2': results_2.url})
 
 
 @login_required
@@ -712,7 +712,7 @@ def sign_completed(request):
     """View function for the successful e-signature completion"""
 
     # Render the HTML template sign_completed.html
-    return render(request, 'sign_completed.html')
+    return render(request, 'offer_form_sign_completed.html')
 
 
 @login_required
@@ -722,4 +722,4 @@ def sign_complete(request):
     user = CustomUser.objects.get(pk=request.user.pk)
 
     # Render the HTML template sign_complete.html
-    return render(request, 'sign_complete.html', {'pdf_path': 'pdf/purchase_agreement_signed_' + str(user.primary_key) +'.pdf'})
+    return render(request, 'offer_form_sign_complete.html', {'pdf_path': 'pdf/purchase_agreement_signed_' + str(user.primary_key) +'.pdf'})

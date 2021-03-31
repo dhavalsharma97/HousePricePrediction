@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractUser
 
 class CustomUser(AbstractUser):
     primary_key = models.CharField(max_length=200, null=True)
+    primary_key_1 = models.CharField(max_length=200, null=True)
 
 class BuyersOffer(models.Model):
     """Model representing a Buyer's Offer"""
