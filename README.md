@@ -16,6 +16,7 @@
  ### Applications
  * Buyers Offer
  * Sellers Counter Offer
+ * Buyers Counter Offer
 
 ## Important Instructions
  * Please create a branch before working. 
