@@ -7,6 +7,7 @@ from reportlab.pdfgen import canvas
 
 from buyers_offer.models import BuyersOffer
 from sellers_counter_offer.models import SellersCounterOffer
+from buyers_counter_offer.models import BuyersCounterOffer
 
 
 def set_need_appearances_writer(writer: PdfFileWriter):
@@ -504,3 +505,42 @@ def fill_pdf_1(application_name, pdf_name, seller_id):
         
     writer = pdfrw.PdfWriter()
     writer.write(application_name + '/static/pdf/sellers_counter_offer_filled_' + seller_id + '.pdf', form)
+
+
+def create_overlay_1(application_name, pdf_name, buyer_id):
+    """Create the data that will be overlayed on top of the form that we want to fill"""
+    
+    c = canvas.Canvas(application_name + '/static/pdf/buyers_counter_offer_temp.pdf')
+    c.setFont('Helvetica-BoldOblique', 9)
+    c.setFillColor('DarkBlue')
+
+    buyers_counter_offer_obj = BuyersCounterOffer.objects.get(pk=buyer_id)
+    sellers_counter_offer_obj = SellersCounterOffer.objects.get(pk=buyers_counter_offer_obj.sellers_id)
+    
+    if not sellers_counter_offer_obj.multiple_offers:
+        c.drawString(66, 512, '6. ' + buyers_counter_offer_obj.other_terms_text_1)
+        c.drawString(66, 497, '7. ' + buyers_counter_offer_obj.other_terms_text_2)
+        c.drawString(66, 482, '8. ' + buyers_counter_offer_obj.other_terms_text_3)
+    else:
+        c.drawString(66, 557, '6. ' + sellers_counter_offer_obj.other_terms_text_1)
+        c.drawString(66, 548, '7. ' + sellers_counter_offer_obj.other_terms_text_2)
+        c.drawString(66, 539, '8. ' + sellers_counter_offer_obj.other_terms_text_3)
+
+    c.save()
+
+
+def fill_pdf_2(application_name, pdf_name, buyer_id):
+    """Merge the specified fillable form PDF with the overlay PDF and save the output"""
+
+    create_overlay_1(application_name, pdf_name, buyer_id)
+
+    form = pdfrw.PdfReader(application_name + '/static/pdf/' + pdf_name + '_' + buyer_id + '.pdf')
+    olay = pdfrw.PdfReader(application_name + '/static/pdf/buyers_counter_offer_temp.pdf')
+    
+    for form_page, overlay_page in zip(form.pages, olay.pages):
+        merge_obj = pdfrw.PageMerge()
+        overlay = merge_obj.add(overlay_page)[0]
+        pdfrw.PageMerge(form_page).add(overlay).render()
+        
+    writer = pdfrw.PdfWriter()
+    writer.write(application_name + '/static/pdf/buyers_counter_offer_filled_' + buyer_id + '.pdf', form)

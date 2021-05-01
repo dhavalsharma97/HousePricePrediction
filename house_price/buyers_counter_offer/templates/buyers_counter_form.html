@@ -1,0 +1,21 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block content %}
+    <form enctype="multipart/form-data" action="" method="POST" id="form" class="buyers_offer_form">
+        {% csrf_token %}
+        <h2>Buyers's Counter Offer</h2>
+        <div class="page">
+            <h3>Term Details</h3>
+            Please upload the contract to counter<br>
+            <input type="file" id="upload_contract" name="sellers_counter_offer">
+        </div>
+
+        <button type="button" id="previous_button" onclick="nextPrev(-1)">Previous</button>
+        <button type="button" id="next_button" onclick="nextPrev(1)">Next</button>
+    </form>
+
+    <script src="{% static 'scripts/scripts.js' %}"></script>
+    <script>
+    </script>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block content %}
+    <h2>Signature Step</h2>
+    <h3>Please sign the Buyers Counter Offer agreement</h3>
+    
+    <p>
+        Signature Links<br>
+        <a href={{ url_1 }}>
+            <button id="signature_button_1">Buyer Signature</button>
+        </a>
+        <a href={{ url_2 }}>
+            <button id="signature_button_2">Spouse Signature</button>
+        </a>
+    </p>
+    <p>
+        Please note that the links will expire within 5 minutes of generation<br>
+        <a href="{% url 'buyerscounterofferaccesscode1' %}">
+            <button>Refresh</button>
+        </a>
+        <a href="{% url 'buyerscounteroffersigncomplete' %}">
+            <button>Next</button>
+        </a>
+    </p>
+{% endblock %}

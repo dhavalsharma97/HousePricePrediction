@@ -1,0 +1,59 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block content %}
+    <form action="" method="POST" id="form" class="buyers_offer_form">
+        {% csrf_token %}
+        <h2>Buyer's Counter Offer</h2>
+        <div class="page">
+            <h3>Term Details</h3>
+            Signed Date of the contract: {{ form.contract_sign_date }}<br><br>
+            To which contract is this a counter offer to? {{ form.contract_offer }}
+            <span id="counter_offer">Counter Offer Number: {{ form.counter_offer }}<br></span>
+            <span id="other_contract_offer">Additional Details: {{ form.other_contract_offer }}<br></span>
+            Property Address: {{ form.property_address }}<br>
+            Buyer's Name: {{ form.buyers_name }}<br>
+            Seller's Name: {{ form.sellers_name }}<br>
+        </div>
+
+        <div class="page">
+            <h3>Term Details</h3>
+            Would you like to accept the offer? {{ form.counter_offer_accept }}<br>
+            <figure>
+                <img src="{% static other_terms_path %}" alt="Other Terms Image"/>
+            </figure>
+        </div>
+
+        <button type="button" id="previous_button" onclick="nextPrev(-1)">Previous</button>
+        <button type="button" id="next_button" onclick="nextPrev(1)">Next</button>
+    </form>
+
+    <script src="{% static 'scripts/scripts.js' %}"></script>
+    <script>
+        // Counter Offer Number
+        document.getElementById("id_contract_offer_0").addEventListener("click", hide_counter_offer);
+        document.getElementById("id_contract_offer_1").addEventListener("click", show_counter_offer);
+        document.getElementById("id_contract_offer_2").addEventListener("click", hide_counter_offer);
+
+        function hide_counter_offer() {
+            document.getElementById("counter_offer").style.display = "none";
+        }
+
+        function show_counter_offer() {
+            document.getElementById("counter_offer").style.display = "inline";
+        }
+
+        // Other Contract Offer
+        document.getElementById("id_contract_offer_0").addEventListener("click", hide_other_contract_offer);
+        document.getElementById("id_contract_offer_1").addEventListener("click", hide_other_contract_offer);
+        document.getElementById("id_contract_offer_2").addEventListener("click", show_other_contract_offer);
+
+        function hide_other_contract_offer() {
+            document.getElementById("other_contract_offer").style.display = "none";
+        }
+
+        function show_other_contract_offer() {
+            document.getElementById("other_contract_offer").style.display = "inline";
+        }
+    </script>
+{% endblock %}

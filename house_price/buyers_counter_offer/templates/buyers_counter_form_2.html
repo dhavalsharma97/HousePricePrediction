@@ -1,0 +1,46 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block content %}
+    <form action="" method="POST" id="form" class="buyers_offer_form">
+        {% csrf_token %}
+        <h2>Buyer's Counter Offer</h2>
+        <div class="page">
+            <h3>Term Details</h3>
+            What terms do you want to add?<br>
+            Term 1: {{ form.other_terms_text_1 }}<br>
+            Term 2: {{ form.other_terms_text_2 }}<br>
+            Term 3: {{ form.other_terms_text_3 }}<br>
+            Term 4: {{ form.other_terms_text_4 }}<br>
+
+            Do you have other terms? {{ form.other_terms }}<br>
+            <span id="additional_terms">Additional Terms: {{ form.additional_terms }}</span>
+
+        </div>
+
+        <div class="page">
+            <h3>Expiration Details</h3>
+            Expiration Time: {{ form.expiration_time }}<br>
+            AM or PM {{ form.expiration_meridian }}
+            Expiration Date: {{ form.expiration_date }}
+        </div>
+
+        <button type="button" id="previous_button" onclick="nextPrev(-1)">Previous</button>
+        <button type="button" id="next_button" onclick="nextPrev(1)">Next</button>
+    </form>
+
+    <script src="{% static 'scripts/scripts.js' %}"></script>
+    <script>
+        // Additional Terms
+        document.getElementById("id_other_terms").addEventListener("click", hide_additional_terms);
+        
+        function hide_additional_terms() {
+            if (document.getElementById("id_other_terms").checked) {
+                document.getElementById("additional_terms").style.display = "inline";
+            }
+            else {
+                document.getElementById("additional_terms").style.display = "none";
+            }
+        }
+    </script>
+{% endblock %}

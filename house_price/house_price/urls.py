@@ -26,7 +26,8 @@ urlpatterns = [
 
 urlpatterns += [
     path('buyersoffer/', include('buyers_offer.urls')),
-    path('sellerscounteroffer/', include('sellers_counter_offer.urls'))
+    path('sellerscounteroffer/', include('sellers_counter_offer.urls')),
+    path('buyerscounteroffer/', include('buyers_counter_offer.urls'))
 ]
 
 # Add URL maps to redirect the base URL to our application

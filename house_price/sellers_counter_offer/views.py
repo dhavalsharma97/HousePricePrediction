@@ -138,6 +138,8 @@ def sellers_counter_form_1(request):
         if form.is_valid():
             sellers_counter_offer_obj = SellersCounterOffer.objects.get(pk=user.primary_key_1)
             sellers_counter_offer_obj.contract_sign_date = form.cleaned_data['contract_sign_date']
+            if sellers_counter_offer_obj.multiple_offers != None and sellers_counter_offer_obj.multiple_offers != form.cleaned_data['multiple_offers']:
+                sellers_counter_offer_obj.envelope_id_1 = None
             sellers_counter_offer_obj.multiple_offers = form.cleaned_data['multiple_offers']
             sellers_counter_offer_obj.contract_offer = form.cleaned_data['contract_offer']
             sellers_counter_offer_obj.counter_offer = form.cleaned_data['counter_offer']
@@ -245,7 +247,7 @@ def counter_form_confirm(request):
 
     user = CustomUser.objects.get(pk=request.user.pk)
     
-    return render(request, 'counter_form_confirm.html', {'pdf_path': 'pdf/sellers_counter_offer_filled_' + str(user.primary_key_1) +'.pdf'})
+    return render(request, 'sellers_counter_form_confirm.html', {'pdf_path': 'pdf/sellers_counter_offer_filled_' + str(user.primary_key_1) +'.pdf'})
 
 
 @login_required
