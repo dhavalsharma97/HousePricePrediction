@@ -4,7 +4,7 @@
 ## Installation Instructions
  * Clone the repo into your local
  * Open a terminal in the root folder
- * Type "pip install PyPDF2, num2words, docusign_esign, pdfminer.six, pdfrw, reportlab, pymupdf"
+ * Type "pip install django, PyPDF2, num2words, docusign_esign, pdfminer.six, pdfrw, reportlab, pymupdf"
  * Type "py manage.py runserver"
  * Go to http://127.0.0.1:8000/ on your browser
  * Admin Page - http://127.0.0.1:8000/admin [Username - admin, Password - admin]
