@@ -127,3 +127,6 @@ STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = '/'
 
 AUTH_USER_MODEL = 'buyers_offer.CustomUser'
+
+# For auto assignment of primary key
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'
