@@ -27,9 +27,6 @@
  * Type "py manage.py runserver" to start the server
  * Go to http://127.0.0.1:8000/admin on your browser to go to the admin page of the project
 
-## Password Details
- * Docusign Account - [Username - ai.house.trade@gmail.com, Password - Housetrade@123]
-
 ## Important Instructions
  * Please create a branch before working. 
  * Make a pull request before pushing any changes.
